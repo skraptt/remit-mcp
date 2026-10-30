@@ -5,13 +5,13 @@
     "short": "REMIT",
     "layer": "regulation",
     "file": "raw/REMIT.html",
-    "url": "http://publications.europa.eu/resource/cellar/faa2e5f6-178a-11ef-a251-01aa75ed71a1.0007.02/DOC_1",
-    "sourceUrl": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02011R1227-20240507",
+    "url": "http://publications.europa.eu/resource/cellar/2e3d9a00-147a-11f0-b1a3-01aa75ed71a1.0007.02/DOC_1",
+    "sourceUrl": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02011R1227-20250205",
     "contentType": "application/xhtml+xml;charset=UTF-8",
-    "bytes": 239802,
-    "sha256": "a260f50f6ea94168ee582de5f4c25c57f76e53a4e7795e530847aa2bca07d0da",
-    "fetchedAt": "2026-10-30T23:18:46.164Z",
-    "celex": "02011R1227-20240507"
+    "bytes": 263483,
+    "sha256": "ada93be91ef00de382faa276d374e9ef214697191d57e990827077cf223fa4cb",
+    "fetchedAt": "2026-10-30T23:25:36.859Z",
+    "celex": "02011R1227-20250205"
   },
   "REMIT-II": {
     "id": "REMIT-II",
@@ -24,7 +24,7 @@
     "contentType": "application/xhtml+xml;charset=UTF-8",
     "bytes": 397412,
     "sha256": "7f934f835b7e7fb71a8a88e5178ba36c3e91a9fccd9d4fb7d0684f73fc33c757",
-    "fetchedAt": "2026-10-30T23:18:46.533Z",
+    "fetchedAt": "2026-10-30T23:25:37.358Z",
     "celex": "32024R1106"
   },
   "IR-2026": {
@@ -38,7 +38,7 @@
     "contentType": "application/xhtml+xml;charset=UTF-8",
     "bytes": 347397,
     "sha256": "ed3f7d6ecd87d651f9fbd1c526b4ef638eede4e643d92ec32cd01478aeaeafed",
-    "fetchedAt": "2026-10-30T23:18:46.939Z",
+    "fetchedAt": "2026-10-30T23:25:37.720Z",
     "celex": "32026R0256"
   },
   "DR-2026": {
@@ -52,7 +52,7 @@
     "contentType": "application/xhtml+xml;charset=UTF-8",
     "bytes": 271512,
     "sha256": "cd251b233922a394022095e062aafb2c7b0cfc0ac539904ea461fd99049a8fbe",
-    "fetchedAt": "2026-10-30T23:18:47.278Z",
+    "fetchedAt": "2026-10-30T23:25:38.090Z",
     "celex": "32026R0255"
   },
   "IR-2014": {
@@ -66,7 +66,7 @@
     "contentType": "application/xhtml+xml;charset=UTF-8",
     "bytes": 241122,
     "sha256": "b0700cf0883d7098f7b64683c46f92684ad9d24e04898480363e07e955077906",
-    "fetchedAt": "2026-10-30T23:18:47.579Z",
+    "fetchedAt": "2026-10-30T23:25:38.462Z",
     "celex": "32014R1348"
   },
   "ACER-GUIDANCE": {
@@ -80,7 +80,7 @@
     "contentType": "application/pdf",
     "bytes": 2182789,
     "sha256": "47ec8314557b7f18726c0284785b308ac272252d0c357555aae543acfe969b85",
-    "fetchedAt": "2026-10-30T23:18:57.369Z"
+    "fetchedAt": "2026-10-30T23:25:54.682Z"
   },
   "ACER-GN-CAPACITY": {
     "id": "ACER-GN-CAPACITY",
@@ -93,7 +93,7 @@
     "contentType": "application/pdf",
     "bytes": 719452,
     "sha256": "5d2399b973fdaecec2e6c2534ec70225bf5b0e78d24fb2569275ee887bf16875",
-    "fetchedAt": "2026-10-30T23:19:01.181Z"
+    "fetchedAt": "2026-10-30T23:25:59.765Z"
   },
   "ACER-GN-LAYERING": {
     "id": "ACER-GN-LAYERING",
@@ -106,7 +106,7 @@
     "contentType": "application/pdf",
     "bytes": 689283,
     "sha256": "56477f8a2f49275cda0bef442e5dd8ef2ce5ca9255a2a8b3b4dd92a20a8aad7e",
-    "fetchedAt": "2026-10-30T23:19:02.658Z"
+    "fetchedAt": "2026-10-30T23:26:01.485Z"
   },
   "ACER-QA": {
     "id": "ACER-QA",
@@ -119,7 +119,7 @@
     "contentType": "application/pdf",
     "bytes": 1811500,
     "sha256": "eefc1ad3ab04e83cdb9d877a4baac6aee59827e471fd8583ec4265ca6723a114",
-    "fetchedAt": "2026-10-30T23:19:06.900Z"
+    "fetchedAt": "2026-10-30T23:26:08.876Z"
   },
   "ACER-OL-IR-2026": {
     "id": "ACER-OL-IR-2026",
@@ -132,7 +132,7 @@
     "contentType": "application/pdf",
     "bytes": 691934,
     "sha256": "794d5eb22488145c42f6e0d10d6ddf5740e3aabb3f4625d6dad903eb04ce3983",
-    "fetchedAt": "2026-10-30T23:19:10.856Z"
+    "fetchedAt": "2026-10-30T23:26:12.645Z"
   },
   "ACER-OL-DR-2026": {
     "id": "ACER-OL-DR-2026",
@@ -145,7 +145,7 @@
     "contentType": "application/pdf",
     "bytes": 491756,
     "sha256": "c5ad6d74b5c9c089b1bc1105c5d6ee52ba3e13c953eaed409acafcba7455c3b3",
-    "fetchedAt": "2026-10-30T23:19:13.738Z"
+    "fetchedAt": "2026-10-30T23:26:14.432Z"
   },
   "ACER-MANUAL-2026": {
     "id": "ACER-MANUAL-2026",
@@ -158,7 +158,7 @@
     "contentType": "application/pdf",
     "bytes": 128199,
     "sha256": "f8a4ffecff451c2089fd714a0d59868473f493a1301a1b2851e16a6fdd9dd1d0",
-    "fetchedAt": "2026-10-30T23:19:14.288Z"
+    "fetchedAt": "2026-10-30T23:26:15.187Z"
   },
   "ACER-WHAT-TO-REPORT-2026": {
     "id": "ACER-WHAT-TO-REPORT-2026",
@@ -171,7 +171,7 @@
     "contentType": "application/pdf",
     "bytes": 308857,
     "sha256": "123f3db33d96603b49c522f3040f6b5ddfb4520f79877330063c1b5c4a8bbfd3",
-    "fetchedAt": "2026-10-30T23:19:19.640Z"
+    "fetchedAt": "2026-10-30T23:26:19.043Z"
   },
   "ACER-GN-WASH": {
     "id": "ACER-GN-WASH",
@@ -184,7 +184,7 @@
     "contentType": "application/pdf",
     "bytes": 623934,
     "sha256": "7c7d19d236ad399ca2eb9f56f4f2fc69d47a156a3762b8d883dd6689b1991451",
-    "fetchedAt": "2026-10-30T23:18:59.179Z"
+    "fetchedAt": "2026-10-30T23:25:56.983Z"
   },
   "ACER-UMM-GUIDANCE": {
     "id": "ACER-UMM-GUIDANCE",
@@ -197,7 +197,7 @@
     "contentType": "application/pdf",
     "bytes": 326499,
     "sha256": "49e970a287c07a9e071457116abcd6478cde8540162995a8dd0e986aaf9861d4",
-    "fetchedAt": "2026-10-30T23:19:15.684Z"
+    "fetchedAt": "2026-10-30T23:26:16.317Z"
   },
   "ACER-OL-ALGO": {
     "id": "ACER-OL-ALGO",
@@ -210,6 +210,6 @@
     "contentType": "application/pdf",
     "bytes": 591922,
     "sha256": "dcf5bf7e39fc3e2a5c2d3a18c7102cd6ac0e712adb52845900e01a1644244e27",
-    "fetchedAt": "2026-10-30T23:19:18.686Z"
+    "fetchedAt": "2026-10-30T23:26:18.213Z"
   }
 }

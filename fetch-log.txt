@@ -1,4 +1,5 @@
-✓ REMIT                         239802 B  http://publications.europa.eu/resource/cellar/faa2e5f6-178a-11ef-a251-01aa75ed71a1.0007.02/DOC_1
+· 02011R1227: SPARQL → HTTP 200, 4 consolidated versions
+✓ REMIT                         263483 B  http://publications.europa.eu/resource/cellar/2e3d9a00-147a-11f0-b1a3-01aa75ed71a1.0007.02/DOC_1
 ✓ REMIT-II                      397412 B  http://publications.europa.eu/resource/cellar/7d9e9087-fc54-11ee-a251-01aa75ed71a1.0006.03/DOC_1
 ✓ IR-2026                       347397 B  http://publications.europa.eu/resource/cellar/d0c9bec3-33ac-11f1-be39-01aa75ed71a1.0006.03/DOC_1
 ✓ DR-2026                       271512 B  http://publications.europa.eu/resource/cellar/9553e1dd-33ac-11f1-be39-01aa75ed71a1.0006.03/DOC_1
