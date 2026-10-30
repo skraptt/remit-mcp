@@ -81,7 +81,7 @@ export const ACER = [
     url: 'https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20REMIT%20Application/Open%20Letters%20on%20REMIT%20Policy/ACER-Open-Letter-REMIT-Implementing-Regulation-2026.pdf',
   },
   { id: 'ACER-OL-DR-2026', title: 'ACER Open Letter on the REMIT Delegated Regulation (2026)', short: 'ACER Open Letter DR 2026', layer: 'guidance', match: /Open-Letter[^/]*Delegated/i },
-  { id: 'ACER-MANUAL-2026', title: 'ACER REMIT manual for new market participants (2026)', short: 'ACER Manual 2026', layer: 'guidance', url: 'https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20REMIT%20Application/REMIT-manual-new-market-participants-2026.pdf' },
+  { id: 'ACER-MANUAL-2026', keepFrontMatter: true, title: 'ACER REMIT manual for new market participants (2026)', short: 'ACER Manual 2026', layer: 'guidance', url: 'https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20REMIT%20Application/REMIT-manual-new-market-participants-2026.pdf' },
   { id: 'ACER-UMM-GUIDANCE', title: 'ACER Guidance on the implementation of web feeds for inside information platforms (UMM)', short: 'ACER UMM Guidance', layer: 'guidance', match: /UMM_Guidance\.pdf$/i },
   { id: 'ACER-OL-ALGO', title: 'ACER Open Letter on algorithmic trading', short: 'ACER Open Letter algo', layer: 'guidance', match: /Open-letter-on-algorithmic-trading/i },
   { id: 'ACER-WHAT-TO-REPORT-2026', title: 'ACER – REMIT data: what to report and how (2026)', short: 'ACER What to report 2026', layer: 'guidance', match: /what[^/]*report/i },

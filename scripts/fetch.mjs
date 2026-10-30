@@ -67,10 +67,25 @@ function save(entry, res, ext) {
 
 // ---- EUR-Lex ----
 async function latestConsolidated(base) {
-  // The "ALL" page lists consolidated versions as CELEX:0YYYYRNNNN-YYYYMMDD.
-  const page = await get(`https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:3${base.slice(1)}`);
+  // 1. Publications Office SPARQL endpoint: all CELEX numbers of consolidated versions.
+  const q = `PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
+SELECT DISTINCT ?c WHERE { ?w cdm:resource_legal_id_celex ?c . FILTER(STRSTARTS(STR(?c), "${base}-")) }`;
   const found = new Set();
-  if (page.ok) for (const m of page.buf.toString('utf8').matchAll(new RegExp(`${base}-(\\d{8})`, 'g'))) found.add(m[1]);
+  const sparql = await get(`https://publications.europa.eu/webapi/rdf/sparql?query=${encodeURIComponent(q)}&format=application%2Fsparql-results%2Bjson`, { Accept: 'application/sparql-results+json' });
+  if (sparql.ok) {
+    try {
+      for (const b of JSON.parse(sparql.buf.toString('utf8')).results.bindings) {
+        const m = b.c.value.match(/-(\d{8})$/);
+        if (m) found.add(m[1]);
+      }
+    } catch {}
+  }
+  log.push(`· ${base}: SPARQL → HTTP ${sparql.status}, ${found.size} consolidated versions`);
+  // 2. EUR-Lex "ALL" page as a fallback.
+  if (!found.size) {
+    const page = await get(`https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:3${base.slice(1)}`);
+    if (page.ok) for (const m of page.buf.toString('utf8').matchAll(new RegExp(`${base}-(\\d{8})`, 'g'))) found.add(m[1]);
+  }
   const dates = [...found].sort();
   return dates.length ? `${base}-${dates[dates.length - 1]}` : `${base}-20240507`;
 }
