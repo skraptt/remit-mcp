@@ -3,12 +3,14 @@
 ✓ IR-2026                       347397 B  http://publications.europa.eu/resource/cellar/d0c9bec3-33ac-11f1-be39-01aa75ed71a1.0006.03/DOC_1
 ✓ DR-2026                       271512 B  http://publications.europa.eu/resource/cellar/9553e1dd-33ac-11f1-be39-01aa75ed71a1.0006.03/DOC_1
 ✓ IR-2014                       241122 B  http://publications.europa.eu/resource/cellar/5cc65dc9-867f-11e4-b8a5-01aa75ed71a1.0006.03/DOC_1
-✓ ACER-GUIDANCE                2758273 B  https://www.acer.europa.eu/sites/default/files/documents/Other%20Documents/6.1st_Edition_ACER_Guidance_REMIT_application_TC.pdf
-✗ ACER-GN-WASH: not fetched (0 candidate URLs)
+✓ ACER-GUIDANCE                2182789 B  https://www.acer.europa.eu/sites/default/files/documents/Other%20Documents/6.1st_Edition_ACER_Guidance.pdf
+✓ ACER-GN-WASH                  623934 B  https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20REMIT%20Application/ACER%20Guidance%20on%20REMIT/Guidance%20Note%20v6.0._published%20on%2019_06_2017.pdf
 ✓ ACER-GN-CAPACITY              719452 B  https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20REMIT%20Application/ACER%20Guidance%20on%20REMIT/Guidance%20Note%20-%20Transmission%20Capacity%20Hoarding.pdf
 ✓ ACER-GN-LAYERING              689283 B  https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20REMIT%20Application/ACER%20Guidance%20on%20REMIT/Guidance%20Note_Layering%20v7.0%20-%20Final%20published.pdf
 ✓ ACER-QA                      1811500 B  https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20REMIT%20Application/Q%26As%20on%20REMIT/REMIT-30th-edition-QAs.pdf
 ✓ ACER-OL-IR-2026               691934 B  https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20REMIT%20Application/Open%20Letters%20on%20REMIT%20Policy/ACER-Open-Letter-REMIT-Implementing-Regulation-2026.pdf
 ✓ ACER-OL-DR-2026               491756 B  https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20REMIT%20Application/Open%20Letters%20on%20REMIT%20Policy/ACER-Open-Letter-REMIT-Delegated-Regulation-2026.pdf
 ✓ ACER-MANUAL-2026              128199 B  https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20REMIT%20Application/REMIT-manual-new-market-participants-2026.pdf
+✓ ACER-UMM-GUIDANCE             326499 B  https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20Inside%20Information%20Collection/UMM_Guidance.pdf
+✓ ACER-OL-ALGO                  591922 B  https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20REMIT%20Application/Open%20Letters%20on%20REMIT%20Policy/Open-letter-on-algorithmic-trading.pdf
 ✓ ACER-WHAT-TO-REPORT-2026      308857 B  https://www.acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/REMIT-data-What-to-report-how-2026.pdf
