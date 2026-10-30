@@ -66,10 +66,10 @@ export const ACER = [
     short: 'ACER Guidance 6.1',
     layer: 'guidance',
     url: 'https://www.acer.europa.eu/sites/default/files/documents/Other%20Documents/6.1st_Edition_ACER_Guidance_REMIT_application_TC.pdf',
-    match: /6\.1st_Edition_ACER_Guidance_REMIT_application(?!_TC)[^/]*\.pdf$/i,
-    note: 'The registry URL is the track-changes version; a clean version is preferred when discovered.',
+    // Clean version first; the track-changes version (registry URL) is the fallback.
+    match: /6\.1st_Edition_ACER_Guidance\.pdf$/i,
   },
-  { id: 'ACER-GN-WASH', title: 'ACER Guidance Note 1/2017 – Wash trades', short: 'ACER GN 1/2017', layer: 'guidance', match: /wash/i },
+  { id: 'ACER-GN-WASH', title: 'ACER Guidance Note 1/2017 – Wash trades', short: 'ACER GN 1/2017', layer: 'guidance', match: /wash|Guidance Note v6\.0/i },
   { id: 'ACER-GN-CAPACITY', title: 'ACER Guidance Note 1/2018 – Transmission capacity hoarding', short: 'ACER GN 1/2018', layer: 'guidance', match: /hoarding/i },
   { id: 'ACER-GN-LAYERING', title: 'ACER Guidance Note 1/2019 – Layering and spoofing', short: 'ACER GN 1/2019', layer: 'guidance', match: /layering|spoofing/i },
   { id: 'ACER-QA', title: 'ACER Q&As on REMIT (12 March 2025)', short: 'ACER Q&A', layer: 'guidance', match: /Q(?:&|%26|and)?A[^/]*REMIT|REMIT[^/]*Q(?:&|%26|and)?As?\b/i },
@@ -82,5 +82,7 @@ export const ACER = [
   },
   { id: 'ACER-OL-DR-2026', title: 'ACER Open Letter on the REMIT Delegated Regulation (2026)', short: 'ACER Open Letter DR 2026', layer: 'guidance', match: /Open-Letter[^/]*Delegated/i },
   { id: 'ACER-MANUAL-2026', title: 'ACER REMIT manual for new market participants (2026)', short: 'ACER Manual 2026', layer: 'guidance', url: 'https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20REMIT%20Application/REMIT-manual-new-market-participants-2026.pdf' },
+  { id: 'ACER-UMM-GUIDANCE', title: 'ACER Guidance on the implementation of web feeds for inside information platforms (UMM)', short: 'ACER UMM Guidance', layer: 'guidance', match: /UMM_Guidance\.pdf$/i },
+  { id: 'ACER-OL-ALGO', title: 'ACER Open Letter on algorithmic trading', short: 'ACER Open Letter algo', layer: 'guidance', match: /Open-letter-on-algorithmic-trading/i },
   { id: 'ACER-WHAT-TO-REPORT-2026', title: 'ACER – REMIT data: what to report and how (2026)', short: 'ACER What to report 2026', layer: 'guidance', match: /what[^/]*report/i },
 ];
