@@ -7,7 +7,7 @@
 // running text into `notes`.
 
 const norm = (t) => t.replace(/\d+/g, '#').replace(/\s+/g, ' ').trim().toLowerCase();
-const NUMBERED = /^(\d{1,2}(?:\.\d{1,3}){0,4})(?:\.\s*|\s+)(?=[A-Za-z(‘“])/;
+const NUMBERED = /^(\d{1,2}(?:\.\d{1,3}){0,4})(?:\.\s*|\s+)(?!(?:January|February|March|April|May|June|July|August|September|October|November|December)\b)(?=[A-Z(‘“\[])/;
 const TOC_LEADER = /\.{5,}\s*\d*\s*$|\s\d{1,3}\s*$/;
 
 function mode(values) {

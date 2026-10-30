@@ -1,0 +1,8 @@
+name = "remit-mcp"
+main = "src/worker.mjs"
+compatibility_date = "2026-10-01"
+
+# The data file (data/remit.json) is bundled at build time; no request reads files.
+# Request logging is off: the server keeps no record of queries.
+[observability]
+enabled = false

@@ -78,6 +78,8 @@ for (const [id, m] of Object.entries(manifest)) {
     // Front matter of the long documents is a cover page and a list of related documents.
     if (s.num === '0' && !reg.keepFrontMatter && sections.length > 12) continue;
     if (!s.text) continue;
+    // Withdrawn Q&As ("2.3.5. [removed on 12 March 2025]") are stubs.
+    if (/^\[(?:removed|merged|deleted)\b/i.test(s.title) && s.text.length < 400) continue;
     let num = s.num;
     if (seen.has(num)) num = `${num}${'′'.repeat(seen.get(num))}`; // duplicate numbering (summary tables)
     seen.set(s.num, (seen.get(s.num) || 0) + 1);

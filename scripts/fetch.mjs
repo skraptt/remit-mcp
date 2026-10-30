@@ -47,6 +47,13 @@ const looksLikeAct = (buf) => {
 
 function save(entry, res, ext) {
   const file = `raw/${entry.id}.${ext}`;
+  const digest = sha(res.buf);
+  const prev = manifest[entry.id];
+  // Unchanged content keeps its record, so the manifest only changes when a source does.
+  if (prev && prev.sha256 === digest && prev.file === file) {
+    log.push(`= ${entry.id.padEnd(26)} unchanged`);
+    return;
+  }
   writeFileSync(join(out, file), res.buf);
   manifest[entry.id] = {
     id: entry.id,
@@ -58,7 +65,7 @@ function save(entry, res, ext) {
     sourceUrl: entry.sourceUrl ?? res.url,
     contentType: res.type,
     bytes: res.buf.length,
-    sha256: sha(res.buf),
+    sha256: digest,
     fetchedAt: new Date().toISOString(),
     ...(entry.celex ? { celex: entry.resolvedCelex ?? entry.celex } : {}),
   };

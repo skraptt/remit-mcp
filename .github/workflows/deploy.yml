@@ -1,0 +1,66 @@
+# Fetches the sources, rebuilds the data, runs the tests and deploys to Cloudflare Workers.
+# Runs on every push to main, daily (to pick up new versions of the acts and ACER
+# documents) and on demand. Fetched documents are kept on the `sources` branch; if a
+# document cannot be fetched, the previously fetched version is used.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '23 5 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: write # the sources branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pdfplumber
+        run: pip install --quiet pdfplumber==0.11.10
+
+      - name: Check out the sources branch
+        run: |
+          if git ls-remote --exit-code --heads origin sources >/dev/null; then
+            git fetch --depth=1 origin sources
+            git worktree add .sources FETCH_HEAD
+          else
+            git worktree add --orphan -b sources .sources
+          fi
+      - name: Fetch sources
+        run: node scripts/fetch.mjs --out .sources
+      - name: Save fetched sources
+        run: |
+          cd .sources
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -q -B sources
+          git add raw manifest.json acer-pdf-links.txt fetch-log.txt
+          if git diff --cached --quiet -- raw manifest.json; then echo "Sources unchanged"; exit 0; fi
+          git commit -q -m "Sources fetched $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -q origin HEAD:sources
+
+      - name: Build data and test
+        run: npm test
+      - name: Deploy to Cloudflare Workers
+        run: npx --yes wrangler@4 deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Summary
+        if: always()
+        run: '[ -f .sources/fetch-log.txt ] && { echo "### Fetch log"; echo "\`\`\`"; cat .sources/fetch-log.txt; echo "\`\`\`"; } >> "$GITHUB_STEP_SUMMARY" || true'
