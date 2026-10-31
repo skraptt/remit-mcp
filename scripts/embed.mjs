@@ -88,8 +88,8 @@ save();
 
 // 2. Evaluation questions
 if (withQueries) {
-  const { CASES } = await import('./eval-cases.mjs');
-  const qs = [...new Set(CASES.map(([q]) => q))].filter((q) => !cache.queries[q]);
+  const { CASES, HOLDOUT = [] } = await import('./eval-cases.mjs');
+  const qs = [...new Set([...CASES, ...HOLDOUT].map(([q]) => q))].filter((q) => !cache.queries[q]);
   console.log(`${qs.length} evaluation questions to embed.`);
   for (let i = 0; i < qs.length; i += BATCH) {
     const part = qs.slice(i, i + BATCH);

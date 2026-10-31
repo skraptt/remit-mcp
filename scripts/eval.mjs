@@ -5,7 +5,7 @@
 import { readFileSync } from 'node:fs';
 import { createEngine } from '../src/engine.mjs';
 import { dequantize, nearest } from '../src/semantic.mjs';
-import { CASES } from './eval-cases.mjs';
+import { CASES, HOLDOUT } from './eval-cases.mjs';
 
 const arg = (n) => {
   const i = process.argv.indexOf(n);
@@ -21,9 +21,10 @@ if (arg('--vectors')) {
   qv = new Map(Object.entries(c.queries || {}).map(([q, v]) => [q, dequantize(v)]));
 }
 
-function run(mode) {
+function run(mode, cases = CASES, name = 'dev') {
   let t1 = 0, t3 = 0, rr = 0;
-  for (const [q, ok] of CASES) {
+  for (const [q, ok] of cases) {
+    if (mode !== 'bm25' && !qv.get(q)) return console.log(`${name.padEnd(8)} ${mode.padEnd(9)} (no query vectors yet)`);
     const semantic = mode === 'bm25' ? null : nearest(store, qv.get(q), { topK: 30 }).map((x) => (typeof x === 'string' ? x : x.id));
     const ids = (mode === 'semantic' ? semantic.slice(0, 5) : e.search({ query: q, limit: 5, semantic }).results.map((x) => x.id)).map((id) => id.replace(/~\d+$/, ''));
     const r = ids.findIndex((id) => ok.includes(id)) + 1;
@@ -32,12 +33,14 @@ function run(mode) {
     rr += r ? 1 / r : 0;
     if (detail) console.log(r === 1 ? '✓' : r && r <= 3 ? '~' : r ? '·' : '✗', q.padEnd(72), ids.slice(0, 3).join('  '));
   }
-  const n = CASES.length;
-  console.log(`${mode.padEnd(9)} ${n} questions   first: ${((100 * t1) / n).toFixed(0)}%   top 3: ${((100 * t3) / n).toFixed(0)}%   MRR@5: ${(rr / n).toFixed(3)}`);
+  const n = cases.length;
+  console.log(`${name.padEnd(8)} ${mode.padEnd(9)} ${n} questions   first: ${((100 * t1) / n).toFixed(0)}%   top 3: ${((100 * t3) / n).toFixed(0)}%   MRR@5: ${(rr / n).toFixed(3)}`);
 }
 
-run('bm25');
-if (store) {
-  run('semantic');
-  run('hybrid');
+for (const [cases, name] of [[CASES, 'dev'], [HOLDOUT, 'holdout']]) {
+  run('bm25', cases, name);
+  if (store) {
+    run('semantic', cases, name);
+    run('hybrid', cases, name);
+  }
 }
