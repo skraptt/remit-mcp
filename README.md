@@ -1,3 +1,5 @@
+<img src="assets/icon.png" width="72" alt="" align="right">
+
 # REMIT MCP
 
 An open-source [Model Context Protocol](https://modelcontextprotocol.io) server for EU

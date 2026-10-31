@@ -6,8 +6,11 @@
 // no session and opens no SSE stream; every POST gets a JSON response.
 
 import { TOOLS, callTool } from './tools.mjs';
+import { ICON_PNG_BASE64 } from './icon.mjs';
 
-export const SERVER_INFO = { name: 'remit', title: 'REMIT MCP', version: '0.1.0' };
+const ICON = Uint8Array.from(atob(ICON_PNG_BASE64), (c) => c.charCodeAt(0));
+
+export const SERVER_INFO = { name: 'remit', title: 'REMIT MCP', version: '1.0.0' };
 const SUPPORTED_VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05'];
 
 const INSTRUCTIONS =
@@ -85,6 +88,8 @@ function infoPage(engine, origin) {
     dataAsOf: d.snapshot,
     sources: ['https://eur-lex.europa.eu', 'https://www.acer.europa.eu'],
     sourceCode: 'https://github.com/skraptt/remit-mcp',
+    privacy: 'https://github.com/skraptt/remit-mcp/blob/main/PRIVACY.md',
+    icon: `${origin}/icon.png`,
   });
 }
 
@@ -93,6 +98,9 @@ export async function handleRequest(engine, request, ctx = {}) {
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
   if (url.pathname === '/' && request.method === 'GET') return infoPage(engine, url.origin);
   if (url.pathname === '/health') return json({ ok: true });
+  if ((url.pathname === '/favicon.ico' || url.pathname === '/icon.png') && request.method === 'GET') {
+    return new Response(ICON, { headers: { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=86400', ...CORS } });
+  }
   if (url.pathname !== '/mcp') return json({ error: 'Not found' }, 404);
   if (request.method === 'GET' || request.method === 'DELETE') return new Response(null, { status: 405, headers: { Allow: 'POST, OPTIONS', ...CORS } });
   if (request.method !== 'POST') return json(rpcError(null, -32600, 'POST only'), 405, { Allow: 'POST, OPTIONS' });

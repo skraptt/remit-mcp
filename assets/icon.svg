@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#0f2a44"/>
+  <!-- document -->
+  <path d="M150 96h158l74 74v246a20 20 0 0 1-20 20H150a20 20 0 0 1-20-20V116a20 20 0 0 1 20-20z" fill="#f4f1ea"/>
+  <path d="M308 96v54a20 20 0 0 0 20 20h54z" fill="#c9c2b2"/>
+  <!-- text lines -->
+  <rect x="168" y="150" width="104" height="16" rx="8" fill="#9aa5b1"/>
+  <rect x="168" y="190" width="176" height="16" rx="8" fill="#9aa5b1"/>
+  <rect x="168" y="382" width="120" height="16" rx="8" fill="#9aa5b1"/>
+  <!-- lightning bolt -->
+  <path d="M274 222 196 330h56l-20 74 86-116h-58l26-66z" fill="#f2a900" stroke="#0f2a44" stroke-width="10" stroke-linejoin="round"/>
+</svg>
