@@ -89,7 +89,8 @@ save();
 // 2. Evaluation questions
 if (withQueries) {
   const { CASES, HOLDOUT = [] } = await import('./eval-cases.mjs');
-  const qs = [...new Set([...CASES, ...HOLDOUT].map(([q]) => q))].filter((q) => !cache.queries[q]);
+  const { CANDIDATES = [] } = await import('./eval-candidates.mjs').catch(() => ({}));
+  const qs = [...new Set([...CASES, ...HOLDOUT].map(([q]) => q).concat(CANDIDATES.map((c) => c[1])))].filter((q) => !cache.queries[q]);
   console.log(`${qs.length} evaluation questions to embed.`);
   for (let i = 0; i < qs.length; i += BATCH) {
     const part = qs.slice(i, i + BATCH);
