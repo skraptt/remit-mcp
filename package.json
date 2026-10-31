@@ -1,6 +1,6 @@
 {
   "name": "remit-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP server for EU REMIT compliance: the regulation, implementing acts, ACER guidance and enforcement, linked article by article",
   "type": "module",
   "license": "Apache-2.0",

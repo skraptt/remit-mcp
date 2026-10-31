@@ -48,10 +48,17 @@ Citations it understands: `Article 5 REMIT`, `Art. 8(1a) REMIT`, `Article 10 IR 
   the query is embedded with the multilingual `qwen3-embedding-0.6b` model on Cloudflare
   Workers AI and matched against unit vectors in Cloudflare Vectorize. If semantic search
   is unavailable, BM25 results are returned. One result per section.
-- **Evaluation.** `npm run eval` scores 30 compliance questions written in everyday terms
-  (first hit, top 3, MRR@5); the deploy workflow reports BM25, semantic and hybrid scores.
-  At 1.0.0: BM25 alone 40% / 57% / 0.49; hybrid 53% / 63% / 0.61. The set is small and
-  was written by the authors, so treat the numbers as a regression check, not a benchmark.
+- **Domain lexicon** (`src/lexicon.mjs`): abbreviations and everyday terms are matched to
+  the legal terms both ways (RRM ↔ registered reporting mechanism, OMP ↔ organised market
+  place, "own group" ↔ intragroup, "outage" ↔ unavailability, "outside the EU" ↔ third
+  country).
+- **Evaluation.** `npm run eval` scores compliance questions written in everyday terms
+  (first hit, top 3, MRR@5) for BM25, semantic and hybrid search. There is a development
+  set (30 questions, used for tuning) and a holdout set (15 questions, written before
+  tuning and not used for it). At 1.0.1, hybrid search: development 70% / 87% / 0.78,
+  holdout 33% / 80% / 0.57. The holdout shows the right unit is usually in the top three
+  but often not first; semantic search alone is weaker on it than BM25. The sets are
+  small and were written by the authors: treat them as a regression check.
 
 ## Use
 

@@ -3,10 +3,13 @@
 // (search({ semantic })) and fused with BM25 by reciprocal rank.
 
 import { fold, tokenize } from './text.mjs';
+import { expansions } from './lexicon.mjs';
 
 const K1 = 1.2;
 const B = 0.75;
 const TITLE_WEIGHT = 6;
+// Reciprocal rank fusion of BM25 and semantic results: score = w / (k + rank).
+export const FUSION = { k: 60, bm25: 1, semantic: 1 };
 const LAYER_LABEL = { regulation: 'Regulation (Level 1)', implementing: 'Implementing / delegated act (Level 2)', guidance: 'ACER guidance (Level 3)' };
 
 // Ways people refer to the documents. Order matters: more specific first.
@@ -59,6 +62,8 @@ export function createEngine(data) {
   units.forEach((u, i) => {
     const tf = new Map();
     for (const t of tokenize(u.t)) tf.set(t, (tf.get(t) || 0) + 1);
+    // Equivalent terms (abbreviation ↔ full form) count once, so both spellings match.
+    for (const t of new Set(tokenize(expansions(`${u.b || ''} ${u.t}`)))) tf.set(t, (tf.get(t) || 0) + 1);
     if (u.b) for (const t of tokenize(u.b)) tf.set(t, (tf.get(t) || 0) + TITLE_WEIGHT);
     let len = 0;
     for (const [t, n] of tf) {
@@ -116,7 +121,7 @@ export function createEngine(data) {
   };
 
   // ---- Search ----
-  function search({ query, layer, document, limit = 8, semantic = null } = {}) {
+  function search({ query, layer, document, limit = 8, semantic = null, fusion = FUSION } = {}) {
     const q = String(query ?? '').trim();
     if (!q) return { error: 'query is empty.' };
     limit = Math.max(1, Math.min(20, Number(limit) || 8));
@@ -126,7 +131,7 @@ export function createEngine(data) {
 
     // A query that is itself a citation returns that provision first.
     const direct = resolveProvision(q);
-    const terms = [...new Set(tokenize(q, { query: true }))];
+    const terms = [...new Set(tokenize(`${q} ${expansions(q)}`, { query: true }))];
     const scores = new Map();
     const hits = new Map();
     for (const t of terms) {
@@ -150,8 +155,8 @@ export function createEngine(data) {
     const sem = (semantic || []).map((id) => byId.get(id)).filter((i) => i != null && allowed(i));
     if (sem.length) {
       const fused = new Map();
-      ranked.forEach((i, r) => fused.set(i, (fused.get(i) || 0) + 1 / (60 + r + 1)));
-      sem.forEach((i, r) => fused.set(i, (fused.get(i) || 0) + 1 / (60 + r + 1)));
+      ranked.forEach((i, r) => fused.set(i, (fused.get(i) || 0) + fusion.bm25 / (fusion.k + r + 1)));
+      sem.forEach((i, r) => fused.set(i, (fused.get(i) || 0) + fusion.semantic / (fusion.k + r + 1)));
       ranked = [...fused].sort((a, b) => b[1] - a[1]).map(([i]) => i);
     }
     // One result per section: split parts collapse into the best-ranked part.
