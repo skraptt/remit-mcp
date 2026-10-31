@@ -50,6 +50,8 @@ Citations it understands: `Article 5 REMIT`, `Art. 8(1a) REMIT`, `Article 10 IR 
   is unavailable, BM25 results are returned. One result per section.
 - **Evaluation.** `npm run eval` scores 30 compliance questions written in everyday terms
   (first hit, top 3, MRR@5); the deploy workflow reports BM25, semantic and hybrid scores.
+  At 1.0.0: BM25 alone 40% / 57% / 0.49; hybrid 53% / 63% / 0.61. The set is small and
+  was written by the authors, so treat the numbers as a regression check, not a benchmark.
 
 ## Use
 

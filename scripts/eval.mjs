@@ -24,7 +24,7 @@ if (arg('--vectors')) {
 function run(mode) {
   let t1 = 0, t3 = 0, rr = 0;
   for (const [q, ok] of CASES) {
-    const semantic = mode === 'bm25' ? null : nearest(store, qv.get(q), { topK: 30 }).map((x) => x.id);
+    const semantic = mode === 'bm25' ? null : nearest(store, qv.get(q), { topK: 30 }).map((x) => (typeof x === 'string' ? x : x.id));
     const ids = (mode === 'semantic' ? semantic.slice(0, 5) : e.search({ query: q, limit: 5, semantic }).results.map((x) => x.id)).map((id) => id.replace(/~\d+$/, ''));
     const r = ids.findIndex((id) => ok.includes(id)) + 1;
     t1 += r === 1;
