@@ -11,6 +11,7 @@
     "pretest": "node scripts/build-data.mjs",
     "test": "node --test test/*.test.mjs",
     "dev": "node scripts/serve.mjs",
+    "eval": "node scripts/eval.mjs",
     "deploy": "npx wrangler@4 deploy"
   },
   "engines": {

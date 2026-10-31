@@ -44,7 +44,12 @@ Citations it understands: `Article 5 REMIT`, `Art. 8(1a) REMIT`, `Article 10 IR 
 - **Linking.** Every guidance unit is scanned for references such as "Article 2(1) of
   REMIT", "Articles 3 and 5 of REMIT" or "Article 6 of the recast REMIT IR"; these links
   drive `get_provision`.
-- **Search.** BM25 over titles and text, one result per section.
+- **Search.** BM25 over titles and text, fused (reciprocal rank) with semantic search:
+  the query is embedded with the multilingual `qwen3-embedding-0.6b` model on Cloudflare
+  Workers AI and matched against unit vectors in Cloudflare Vectorize. If semantic search
+  is unavailable, BM25 results are returned. One result per section.
+- **Evaluation.** `npm run eval` scores 30 compliance questions written in everyday terms
+  (first hit, top 3, MRR@5); the deploy workflow reports BM25, semantic and hybrid scores.
 
 ## Use
 

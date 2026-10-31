@@ -55,6 +55,47 @@ jobs:
 
       - name: Build data and test
         run: npm test
+
+      # Semantic search: embed new or changed units with Workers AI and upload them to
+      # Vectorize. The vector cache lives on the `vectors` branch.
+      - name: Check out the vector cache
+        run: |
+          if git ls-remote --exit-code --heads origin vectors >/dev/null; then
+            git fetch --depth=1 origin vectors
+            git worktree add .vectors FETCH_HEAD
+          else
+            git worktree add --orphan -b vectors .vectors
+          fi
+      - name: Prepare the Vectorize index
+        run: |
+          if ! npx --yes wrangler@4 vectorize get remit >/dev/null 2>&1; then
+            npx --yes wrangler@4 vectorize create remit --dimensions=512 --metric=cosine
+          fi
+          npx --yes wrangler@4 vectorize create-metadata-index remit --propertyName=d --type=string || true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Embed and upload
+        run: node scripts/embed.mjs --cache .vectors --queries --upload
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Save the vector cache
+        if: always()
+        run: |
+          cd .vectors
+          [ -f vectors.json ] || exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -q -B vectors
+          git add vectors.json
+          git diff --cached --quiet && exit 0
+          git commit -q -m "Vector cache updated"
+          git push -q origin HEAD:vectors
+      - name: Evaluate search
+        run: npm run -s eval -- --vectors .vectors/vectors.json | tee -a "$GITHUB_STEP_SUMMARY"
+        continue-on-error: true
+
       - name: Deploy to Cloudflare Workers
         run: npx --yes wrangler@4 deploy
         env:

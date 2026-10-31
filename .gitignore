@@ -4,3 +4,4 @@ node_modules/
 .sources/
 .vektor/
 data/remit.json
+.vectors/

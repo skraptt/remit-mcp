@@ -6,3 +6,12 @@ compatibility_date = "2026-10-01"
 # Request logging is off: the server keeps no record of queries.
 [observability]
 enabled = false
+
+# Semantic search: the query is embedded with Workers AI and the nearest units are looked
+# up in Vectorize (src/semantic.mjs). The index is prepared by the deploy workflow.
+[ai]
+binding = "AI"
+
+[[vectorize]]
+binding = "VEC"
+index_name = "remit"
