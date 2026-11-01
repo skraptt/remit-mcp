@@ -1,7 +1,7 @@
 // Judged evaluation: BM25, semantic and hybrid search against eval/qrels.json
 // (graded relevance 0/1/2 for 115 questions; see the "method" field in that file).
 //
-//   node scripts/eval-judged.mjs --vectors .vectors/vectors.json [--detail] [--type everyday|technical|temporal]
+//   node scripts/eval-judged.mjs --vectors .vectors/vectors.json [--detail] [--type everyday|technical|temporal] [--split dev|test]
 //
 // Metrics (unjudged results count as not relevant; the share of unjudged results is printed):
 //   nDCG@5      graded, gain 2^g - 1 (answers = 3, relevant = 1), ideal from all judged units
@@ -48,12 +48,30 @@ function runs(q) {
   return out;
 }
 
+// Fixed dev/test split, stratified by question type: within each type, questions are
+// ordered by a hash of their id and the first 60% go to dev. Tune on dev only; report
+// test once a change is final.
+import { createHash } from 'node:crypto';
+const split = arg('--split');
+const SPLIT = new Map();
+{
+  const byType = {};
+  for (const [id, , , type] of CANDIDATES) (byType[type] ??= []).push(id);
+  const h = (s) => createHash('sha256').update(`remit-split-2026|${s}`).digest('hex');
+  for (const ids of Object.values(byType)) {
+    ids.sort((a, b) => (h(a) < h(b) ? -1 : 1));
+    const nDev = Math.round(ids.length * 0.6);
+    ids.forEach((id, i) => SPLIT.set(id, i < nDev ? 'dev' : 'test'));
+  }
+}
+
 const dcg = (gains) => gains.reduce((s, g, i) => s + (2 ** g - 1) / Math.log2(i + 2), 0);
 
 const tot = {};
 const perQ = [];
 for (const [id, q, , type] of CANDIDATES) {
   if (onlyType && type !== onlyType) continue;
+  if (split && SPLIT.get(id) !== split) continue;
   const rel = qrels[id] || {};
   const answers = Object.keys(rel).filter((u) => rel[u] === 2);
   const ideal = dcg(Object.values(rel).sort((a, b) => b - a).slice(0, 5));
@@ -86,7 +104,7 @@ for (const [id, q, , type] of CANDIDATES) {
 
 const fmt = (v, pct) => (pct ? `${(100 * v).toFixed(0)}%` : v.toFixed(3));
 const cols = [['ndcg5', 'nDCG@5', 0], ['succ1', 'Succ@1', 1], ['mrr5', 'MRR@5', 0], ['r5', 'R@5', 1], ['r8', 'R@8', 1], ['rel5', 'Rel@5', 1], ['old5', 'Old@5', 1], ['unj8', 'unjudged@8', 1]];
-console.log(`${perQ.length} questions${onlyType ? ` (${onlyType})` : ''}; ${perQ.filter((r) => r.no2).length} with no answering unit (No2)`);
+console.log(`${perQ.length} questions${onlyType ? ` (${onlyType})` : ''}${split ? ` [${split}]` : ''}; ${perQ.filter((r) => r.no2).length} with no answering unit (No2)`);
 console.log(['system'.padEnd(9), ...cols.map(([, h]) => h.padStart(11))].join(''));
 for (const [sys, t] of Object.entries(tot)) {
   console.log([sys.padEnd(9), ...cols.map(([k, , p]) => (t[`${k}#`] ? fmt(t[k] / t[`${k}#`], p) : '-').padStart(11))].join(''));
