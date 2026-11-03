@@ -133,4 +133,27 @@ export const CANDIDATES = [
   ['t006', 'Until when can existing RRMs operate under their old registration?', null, 'temporal'],
   ['t007', 'Since when does ACER publish LNG price assessments?', null, 'temporal'],
   ['t008', 'What changed in the reporting deadlines in April 2026?', null, 'temporal'],
+
+  // ---- Reporting practice (written 3 Nov 2026, before the reporting manuals were indexed
+  //      and before any results were seen; for the TRUM, MoP and exposure guidance) ----
+  ['r001', 'How do we generate and report the unique transaction ID for a bilateral trade?', null, 'reporting'],
+  ['r002', 'Can we identify ourselves in a transaction report with our LEI instead of the ACER code?', null, 'reporting'],
+  ['r003', 'Which timestamp do we report for a trade executed on an exchange?', null, 'reporting'],
+  ['r004', 'How do we report a trade that was cancelled after it was executed?', null, 'reporting'],
+  ['r005', 'What do we put in the type of event field of an urgent market message for a gas storage outage?', null, 'reporting'],
+  ['r006', 'How do we update an outage message when the outage lasts longer than first announced?', null, 'reporting'],
+  ['r007', 'Which fields must an urgent market message for an unavailable power plant contain?', null, 'reporting'],
+  ['r008', 'What is the message ID of an urgent market message made up of?', null, 'reporting'],
+  ['r009', 'Who reports LNG market data, and how fast?', null, 'reporting'],
+  ['r010', 'Do positions from intragroup trades go into the exposure report?', null, 'reporting'],
+  ['r011', 'How do we calculate whether we are above the 600 GWh threshold for exposure reporting?', null, 'reporting'],
+  ['r012', 'Which delivery period does the quarterly exposure report cover?', null, 'reporting'],
+  ['r013', 'Which channels can a reporting mechanism use to send data to ACER?', null, 'reporting'],
+  ['r014', 'How do we report a power purchase agreement with a fixed price and variable volume?', null, 'reporting'],
+  ['r015', 'How do we report the delivery point or zone for a gas trade?', null, 'reporting'],
+  ['r016', 'What happens when ACER rejects one of our transaction reports?', null, 'reporting'],
+  ['r017', 'How are orders placed through direct electronic access to an exchange reported?', null, 'reporting'],
+  ['r018', 'Which version of the TRUM do we follow for reports submitted in 2027?', null, 'reporting'],
+  ['r019', 'How do we report the price of a contract linked to an index?', null, 'reporting'],
+  ['r020', 'Who reports gas nominations to ACER?', null, 'reporting'],
 ];
