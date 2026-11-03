@@ -140,7 +140,7 @@ async function fetchAcer(entry, links) {
   if (entry.match) {
     const found = links.filter((l) => entry.match.test(decodeURIComponent(l.split('/').pop())));
     // Highest version number in the file name first ("v7.0", "V10").
-    const ver = (l) => (decodeURIComponent(l.split('/').pop()).match(/v(\d+)(?:\.(\d+))?\.pdf$/i) || []).slice(1).map(Number);
+    const ver = (l) => (decodeURIComponent(l.split('/').pop()).match(/v(\d+)(?:\.(\d+))?(?:-\d{4})?\.pdf$/i) || []).slice(1).map(Number);
     if (entry.latest) found.sort((a, b) => { const [a1 = 0, a2 = 0] = ver(a), [b1 = 0, b2 = 0] = ver(b); return b1 - a1 || b2 - a2; });
     candidates.push(...found);
   }
