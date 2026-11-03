@@ -27,7 +27,10 @@ const onlyType = arg('--type');
 
 const data = JSON.parse(readFileSync(new URL('../data/remit.json', import.meta.url), 'utf8'));
 const { qrels } = JSON.parse(readFileSync(new URL('../eval/qrels.json', import.meta.url), 'utf8'));
-const e = createEngine(data);
+// --dw "ACER-TRUM=0.7,ACER-MOP=0.7": document weights to try (see createEngine).
+const dwArg = arg('--dw');
+const docWeight = Object.fromEntries((dwArg ? dwArg.split(',') : []).map((x) => x.split('=')).map(([k, v]) => [k, +v]));
+const e = createEngine(data, { docWeight });
 const vpath = arg('--vectors');
 const c = vpath ? JSON.parse(readFileSync(vpath, 'utf8')) : null;
 const store = c ? new Map(Object.entries(c.units).map(([id, v]) => [id, dequantize(v)])) : null;

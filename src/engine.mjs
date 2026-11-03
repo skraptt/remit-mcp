@@ -36,7 +36,9 @@ const DOC_ALIASES = [
   ['REMIT', /\b(?:remit|1227\s*\/\s*2011)\b/i],
 ];
 
-export function createEngine(data) {
+// docWeight: optional { docId: weight } overriding the documents' own `weight` (default 1).
+// A weight below 1 lowers a document's results in ranking (both BM25 and semantic).
+export function createEngine(data, { docWeight = {} } = {}) {
   const { docs, units } = data;
   const docById = new Map(docs.map((d) => [d.id, d]));
   const idOf = (u) => `${u.d}/${u.n}`;
@@ -60,6 +62,7 @@ export function createEngine(data) {
     }
   });
 
+  const unitWeight = units.map((u) => docWeight[u.d] ?? docs.find((d) => d.id === u.d)?.weight ?? 1);
   const isNav = units.map((u) => u.d === 'ACER-QA' && !/^\d+\.\d+\.\d+/.test(u.n));
 
   // ---- BM25 index (built at start-up; the corpus is small) ----
@@ -157,7 +160,7 @@ export function createEngine(data) {
       }
     }
     let ranked = [...scores]
-      .map(([i, s]) => [i, s * (0.5 + (0.5 * (hits.get(i) || 0)) / Math.max(1, terms.length))])
+      .map(([i, s]) => [i, unitWeight[i] * s * (0.5 + (0.5 * (hits.get(i) || 0)) / Math.max(1, terms.length))])
       .sort((a, b) => b[1] - a[1])
       .map(([i]) => i);
 
@@ -165,7 +168,7 @@ export function createEngine(data) {
     if (sem.length) {
       const fused = new Map();
       ranked.forEach((i, r) => fused.set(i, (fused.get(i) || 0) + fusion.bm25 / (fusion.k + r + 1)));
-      sem.forEach((i, r) => fused.set(i, (fused.get(i) || 0) + fusion.semantic / (fusion.k + r + 1)));
+      sem.forEach((i, r) => fused.set(i, (fused.get(i) || 0) + (unitWeight[i] * fusion.semantic) / (fusion.k + r + 1)));
       ranked = [...fused].sort((a, b) => b[1] - a[1]).map(([i]) => i);
     }
     // One result per section: split parts collapse into the best-ranked part.

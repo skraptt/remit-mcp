@@ -79,6 +79,7 @@ for (const [id, m] of Object.entries(manifest)) {
   if (!reg) continue;
   const doc = { id, title: reg.title, short: reg.short, layer: reg.layer, url: m.sourceUrl || m.url, fetchedAt: m.fetchedAt, sha256: m.sha256 };
   if (m.celex) doc.celex = m.celex;
+  if (reg.weight != null) doc.weight = reg.weight;
   docs.push(doc);
 
   if (m.file.endsWith('.html')) {
