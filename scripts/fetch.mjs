@@ -160,6 +160,8 @@ for (const e of ACER.filter(want)) await fetchAcer(e, links);
 
 writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
 writeFileSync(join(out, 'fetch-log.txt'), log.join('\n') + '\n');
+// When the sources were last checked, whether or not anything changed (read by build-data).
+writeFileSync(join(out, 'checked.txt'), `${new Date().toISOString()}\n`);
 console.log(log.join('\n'));
 const missing = [...EURLEX, ...ACER].filter(want).filter((e) => !manifest[e.id]);
 if (missing.length) console.log(`\n${missing.length} source(s) missing: ${missing.map((e) => e.id).join(', ')}`);

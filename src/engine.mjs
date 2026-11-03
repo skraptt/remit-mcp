@@ -234,7 +234,7 @@ export function createEngine(data) {
       ...(notes.length ? { footnotes: notes } : {}),
       ...(r.paragraph ? { paragraphRequested: r.paragraph } : {}),
       url: urlOf(first),
-      source: { url: d.url, fetchedAt: d.fetchedAt },
+      source: { url: d.url, fetchedAt: d.fetchedAt, checkedAt: data.checked ?? data.snapshot },
     };
 
     if (first.k === 'article') {
@@ -274,6 +274,7 @@ export function createEngine(data) {
   function listDocuments() {
     return {
       snapshot: data.snapshot,
+      checked: data.checked ?? data.snapshot,
       documents: docs.map((d) => ({
         id: d.id,
         title: d.title,

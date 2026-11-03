@@ -110,9 +110,13 @@ for (const u of units) {
   if (cites.length) u.l = cites.map((c) => c.id);
 }
 
+// snapshot: when a source last changed. checked: when the sources were last checked for
+// changes (the fetch run before this build; falls back to the snapshot).
 const snapshot = docs.map((d) => d.fetchedAt).sort().pop();
+const checkedFile = join(src, 'checked.txt');
+const checked = existsSync(checkedFile) ? readFileSync(checkedFile, 'utf8').trim() : snapshot;
 mkdirSync('data', { recursive: true });
-writeFileSync('data/remit.json', JSON.stringify({ snapshot, docs, units }));
+writeFileSync('data/remit.json', JSON.stringify({ snapshot, checked, docs, units }));
 const byDoc = {};
 for (const u of units) byDoc[u.d] = (byDoc[u.d] || 0) + 1;
 const linked = units.filter((u) => u.k === 'section' && u.l).length;

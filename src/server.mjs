@@ -86,6 +86,7 @@ function infoPage(engine, origin) {
     tools: TOOLS.map((t) => t.name),
     documents: d.documents.length,
     dataAsOf: d.snapshot,
+    lastChecked: d.checked,
     sources: ['https://eur-lex.europa.eu', 'https://www.acer.europa.eu'],
     sourceCode: 'https://github.com/skraptt/remit-mcp',
     privacy: 'https://github.com/skraptt/remit-mcp/blob/main/PRIVACY.md',
