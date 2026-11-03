@@ -67,6 +67,19 @@ function splitSection(text, { lines = false } = {}) {
   });
 }
 
+// Ranking weight of a section (scripts/sources.mjs `rank`): data fields and annexes keep 1;
+// `chapters` (a pattern on the section number) and introduction / legal framework sections
+// ("framework") get the configured weight. Used for the reporting manuals, whose general
+// chapters restate the law and otherwise crowd out the provisions and Q&As.
+const FRAMEWORK = /^(introduction|legal framework|scope and purpose|target audience|acer contacts|market monitoring|front matter)/i;
+function rankWeight(reg, num, title) {
+  const r = reg.rank;
+  if (!r || /, field \(|^Annex /.test(num)) return 1;
+  if (r.chapters && r.chapters.test(num)) return r.weight;
+  if (r.framework && FRAMEWORK.test(title || '')) return r.weight;
+  return 1;
+}
+
 const paraRange = (t) => {
   const nums = [...t.matchAll(/^\((\d{1,4})\)\s/gm)].map((m) => +m[1]);
   return nums.length ? (nums.length === 1 ? `para. (${nums[0]})` : `paras. (${nums[0]})–(${nums[nums.length - 1]})`) : null;
@@ -106,9 +119,11 @@ for (const [id, m] of Object.entries(manifest)) {
     const parts = splitSection(s.text, { lines: !!tables });
     parts.forEach((t, i) => {
       const cites = findCitations(`${s.title}\n${t}\n${s.notes.join('\n')}`, { defaultIR });
+      const w = rankWeight(reg, num, s.title);
       units.push({
         d: id,
         k: 'section',
+        ...(w !== 1 ? { w } : {}),
         n: parts.length > 1 ? `${num}~${i + 1}` : num,
         b: s.title,
         t,

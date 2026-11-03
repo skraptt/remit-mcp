@@ -90,6 +90,7 @@ export const ACER = [
   // highest version number in the file name, and `url` is the fallback.
   {
     id: 'ACER-TRUM',
+    rank: { weight: 0.5, framework: true }, // see rankWeight in build-data.mjs
     defaultIR: 'IR-2026', // "the REMIT Implementing Regulation" in this document
     pdf: { tables: true, annexes: true, numberedPlain: true, fieldHeadings: true },
     title: 'ACER Transaction Reporting User Manual (TRUM), latest version – for reporting under Implementing Regulation (EU) 2026/256 from 29 October 2027',
@@ -101,6 +102,7 @@ export const ACER = [
   },
   {
     id: 'ACER-TRUM-7',
+    rank: { weight: 0.5, framework: true, chapters: /^[0-3](?:\.|$)/ }, // see rankWeight in build-data.mjs
     defaultIR: 'IR-2014', // "the REMIT Implementing Regulation" in this document
     pdf: { tables: true, annexes: true, numberedPlain: true, fieldHeadings: true },
     title: 'ACER Transaction Reporting User Manual (TRUM) v7.0 – applies until 29 October 2027 (reporting tables of Implementing Regulation 1348/2014)',
@@ -110,6 +112,7 @@ export const ACER = [
   },
   {
     id: 'ACER-EXPOSURE',
+    rank: { weight: 0.5, framework: true }, // see rankWeight in build-data.mjs
     defaultIR: 'IR-2026', // "the REMIT Implementing Regulation" in this document
     pdf: { tables: true, annexes: true, numberedPlain: true, fieldHeadings: true },
     title: 'ACER Guidance on reporting exposure under REMIT (Article 6 of Implementing Regulation (EU) 2026/256)',
@@ -119,6 +122,7 @@ export const ACER = [
   },
   {
     id: 'ACER-MOP',
+    rank: { weight: 0.5, framework: true }, // see rankWeight in build-data.mjs
     defaultIR: 'IR-2014', // "the REMIT Implementing Regulation" in this document
     pdf: { tables: true, annexes: true, numberedPlain: true, fieldHeadings: true },
     title: 'ACER Manual of Procedures (MoP) on transaction data, fundamental data and inside information reporting (Annex VII: data fields for inside information)',

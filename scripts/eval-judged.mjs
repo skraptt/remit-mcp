@@ -51,7 +51,9 @@ const unitWeight = uwArg
   : null;
 // --intent: questions about reporting mechanics keep the manuals at full weight.
 const INTENT = /\b(?:fields?|timestamps?|uti|lei|eic|ace?r code|umms?|urgent market messages?|message id|outage messages?|tables?|xml|schemas?|formats?|codes?|lifecycle|cancel\w*|exposure|positions?|trum|mop|nominations?|delivery points?|index|price fields?|channels?|rejects?|validation)\b/i;
-const e = createEngine(data, { docWeight, unitWeight, fullWeightWhen: process.argv.includes('--intent') ? INTENT : null });
+// Without --uw the weights stored in the data (u.w) apply; --no-intent switches the
+// reporting-intent rule off.
+const e = createEngine(data, { docWeight, unitWeight, ...(process.argv.includes('--no-intent') ? { fullWeightWhen: null } : process.argv.includes('--intent') ? { fullWeightWhen: INTENT } : {}) });
 const vpath = arg('--vectors');
 const c = vpath ? JSON.parse(readFileSync(vpath, 'utf8')) : null;
 const store = c ? new Map(Object.entries(c.units).map(([id, v]) => [id, dequantize(v)])) : null;

@@ -17,6 +17,7 @@ article**, so that asking about a provision also brings up how ACER interprets i
 | Regulation | REMIT — Regulation (EU) No 1227/2011, latest consolidated version (incl. REMIT II); Regulation (EU) 2024/1106 (REMIT II) with its recitals |
 | Implementing / delegated acts | Implementing Regulation (EU) 2026/256 on data reporting (with annex reporting tables); Delegated Regulation (EU) 2026/255 on RRMs and IIPs; Implementing Regulation (EU) No 1348/2014 (repealed; kept for the transition) |
 | ACER guidance | Guidance on the application of REMIT (6.1st edition); guidance notes on wash trades, transmission capacity hoarding, layering and spoofing; Q&As on REMIT (30th edition); open letters on the 2026 implementing and delegated regulations and on algorithmic trading; UMM web-feed guidance; 2026 manual for new market participants; "REMIT data: what to report and how" |
+| ACER reporting manuals | Transaction Reporting User Manual (TRUM) v8.0, for reporting under Implementing Regulation 2026/256 from 29 October 2027, and TRUM v7.0, which applies until then; Manual of Procedures (MoP) on data reporting, including Annex VII on the data fields of urgent market messages; Guidance on reporting exposure (Article 6 of Implementing Regulation 2026/256). Each data field is its own unit. |
 
 Sources are fetched from EUR-Lex (Publications Office CELLAR) and acer.europa.eu every
 day; a new consolidated version of REMIT or a new edition of an ACER document is picked up
@@ -33,21 +34,28 @@ automatically.
 
 Citations it understands: `Article 5 REMIT`, `Art. 8(1a) REMIT`, `Article 10 IR 2026`,
 `Article 16 1348/2014`, `Article 12 Delegated Regulation`, `Recital 12 REMIT II`,
-`IR 2026 Annex Table 1`, `ACER Guidance 6.2.1`, `Q&A 2.4.13`.
+`IR 2026 Annex Table 1`, `ACER Guidance 6.2.1`, `Q&A 2.4.13`, `TRUM field 30`,
+`TRUM 7.0 4.4 field (30)`, `MoP Annex VII field 4/b`, `exposure guidance 2.3`.
 
 ## How it works
 
 - **Parsing.** EUR-Lex acts are split into recitals, articles and annex tables from their
   XHTML. ACER PDFs have no bookmarks, so sections are recovered from typography (heading
   size and weight) with ACER's own numbering; long sections are split at paragraph numbers.
-  Running headers and footers are removed and footnotes are kept separately.
+  Running headers and footers are removed and footnotes are kept separately. In the
+  reporting manuals, ruled tables are read row by row ("cell | cell"), annexes keep their
+  own numbering and every "Data Field (n)" becomes its own unit.
 - **Linking.** Every guidance unit is scanned for references such as "Article 2(1) of
   REMIT", "Articles 3 and 5 of REMIT" or "Article 6 of the recast REMIT IR"; these links
   drive `get_provision`.
 - **Search.** BM25 over titles and text, fused (reciprocal rank) with semantic search:
   the query is embedded with the multilingual `qwen3-embedding-0.6b` model on Cloudflare
   Workers AI and matched against unit vectors in Cloudflare Vectorize. If semantic search
-  is unavailable, BM25 results are returned. One result per section.
+  is unavailable, BM25 results are returned. One result per section. The general chapters
+  of the reporting manuals (introductions, legal framework, and TRUM v7.0's chapters on the
+  1348/2014 obligations) rank at half weight unless the question is about reporting
+  mechanics (fields, codes, formats, UMMs, exposure …), so they do not crowd out the
+  provisions and Q&As.
 - **Domain lexicon** (`src/lexicon.mjs`): abbreviations and everyday terms are matched to
   the legal terms both ways (RRM ↔ registered reporting mechanism, OMP ↔ organised market
   place, "own group" ↔ intragroup, "outage" ↔ unavailability, "outside the EU" ↔ third
@@ -59,6 +67,12 @@ Citations it understands: `Article 5 REMIT`, `Art. 8(1a) REMIT`, `Article 10 IR 
   holdout 33% / 80% / 0.57. The holdout shows the right unit is usually in the top three
   but often not first; semantic search alone is weaker on it than BM25. The sets are
   small and were written by the authors: treat them as a regression check.
+- **Judged evaluation.** `scripts/eval-judged.mjs` scores search against `eval/qrels.json`:
+  135 questions with graded relevance (2 answers / 1 relevant / 0 not) for 1,597 pooled
+  results, graded by two independent LLM judges and reviewed by a lawyer where they
+  disagreed (method in the file). Fixed dev/test split. At 1.1.0, hybrid search, test
+  split: first result answers the question 84% (115 general questions) and 33% (8
+  reporting-practice questions; answer in the top five 83%).
 
 ## Use
 

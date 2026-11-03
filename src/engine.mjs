@@ -38,8 +38,14 @@ const DOC_ALIASES = [
 
 // docWeight: optional { docId: weight } overriding the documents' own `weight` (default 1).
 // A weight below 1 lowers a document's results in ranking (both BM25 and semantic).
-// fullWeightWhen: optional regex; when the query matches it, unit weights are ignored.
-export function createEngine(data, { docWeight = {}, unitWeight: unitWeightFn = null, fullWeightWhen = null } = {}) {
+// Questions about reporting mechanics (fields, codes, formats, UMMs, exposure …): unit
+// weights are ignored for them, so the reporting manuals rank at full weight. Chosen on the
+// judged dev split (eval/qrels.json, 3 Nov 2026).
+export const REPORTING_INTENT =
+  /\b(?:fields?|timestamps?|uti|lei|eic|ace?r code|umms?|urgent market messages?|message id|outage messages?|tables?|xml|schemas?|formats?|codes?|lifecycle|cancel\w*|exposure|positions?|trum|mop|nominations?|delivery points?|index|price fields?|channels?|rejects?|validation)\b/i;
+
+// fullWeightWhen: when the query matches it, unit weights are ignored (null: never).
+export function createEngine(data, { docWeight = {}, unitWeight: unitWeightFn = null, fullWeightWhen = REPORTING_INTENT } = {}) {
   const { docs, units } = data;
   const docById = new Map(docs.map((d) => [d.id, d]));
   const idOf = (u) => `${u.d}/${u.n}`;
