@@ -56,6 +56,8 @@ export function createEngine(data) {
     }
   });
 
+  const isNav = units.map((u) => u.d === 'ACER-QA' && !/^\d+\.\d+\.\d+/.test(u.n));
+
   // ---- BM25 index (built at start-up; the corpus is small) ----
   const postings = new Map();
   const docLen = new Float32Array(units.length);
@@ -128,6 +130,9 @@ export function createEngine(data) {
     const docFilter = document ? resolveDoc(document) : null;
     if (document && !docFilter) return { error: `Unknown document "${document}". Use list_documents to see the available documents.` };
     const allowed = (i) => (!layer || docById.get(units[i].d).layer === layer) && (!docFilter || units[i].d === docFilter);
+    // Q&A chapter introductions ("This section contains answers on …") never answer a
+    // question; they are left out of ranked results but still resolve as citations.
+    const ranks = (i) => allowed(i) && !isNav[i];
 
     // A query that is itself a citation returns that provision first.
     const direct = resolveProvision(q);
@@ -141,7 +146,7 @@ export function createEngine(data) {
       const idf = Math.log(1 + (N - df + 0.5) / (df + 0.5));
       for (let j = 0; j < p.length; j += 2) {
         const i = p[j];
-        if (!allowed(i)) continue;
+        if (!ranks(i)) continue;
         const tf = p[j + 1];
         scores.set(i, (scores.get(i) || 0) + idf * ((tf * (K1 + 1)) / (tf + K1 * (1 - B + (B * docLen[i]) / avgLen))));
         hits.set(i, (hits.get(i) || 0) + 1);
@@ -152,7 +157,7 @@ export function createEngine(data) {
       .sort((a, b) => b[1] - a[1])
       .map(([i]) => i);
 
-    const sem = (semantic || []).map((id) => byId.get(id)).filter((i) => i != null && allowed(i));
+    const sem = (semantic || []).map((id) => byId.get(id)).filter((i) => i != null && ranks(i));
     if (sem.length) {
       const fused = new Map();
       ranked.forEach((i, r) => fused.set(i, (fused.get(i) || 0) + fusion.bm25 / (fusion.k + r + 1)));

@@ -38,7 +38,13 @@ export function stem(w) {
 
 export function tokenize(text, { query = false } = {}) {
   const out = [];
-  for (const raw of fold(text).split(/[^a-z0-9]+/)) {
+  const folded = fold(text);
+  // Hyphenated compounds also count as one word ("de-register" = "deregister").
+  for (const m of folded.matchAll(/\b([a-z]{2,})-([a-z]{3,})\b/g)) {
+    const joined = m[1] + m[2];
+    if (!STOP.has(joined)) out.push(stem(joined));
+  }
+  for (const raw of folded.split(/[^a-z0-9]+/)) {
     if (!raw || STOP.has(raw) || (query && QUERY_STOP.has(raw))) continue;
     if (raw.length < 2 && !/\d/.test(raw)) continue;
     out.push(stem(raw));

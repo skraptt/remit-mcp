@@ -19,6 +19,10 @@ export const LEXICON = [
   ['intragroup', 'intra-group', 'own group', 'same group', 'group companies'],
   ['third country', 'third-country', 'outside the eu', 'outside the union', 'non-eu'],
   ['unavailability', 'outage'],
+  ['deregister', 'deregistration', 'cancel the registration', 'remove from the register'],
+  ['permanently shut down', 'permanent shutdown', 'closed for good', 'decommission', 'decommissioned', 'closure of the plant'],
+  ['same facility', 'same site', 'on-site', 'onsite', 'self-consumption', 'consumed internally'],
+  ['wash trade', 'wash trading', 'trade with each other', 'trade with ourselves', 'self-trade', 'self-trading'],
 ];
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

@@ -36,7 +36,16 @@ const dedupe = (ids) => [...new Set(ids.map(base))];
 const DEPTH = 10;
 const TRANSITION = new Set(['t002']); // questions about the old regulation itself
 
-function runs(q) {
+// Experiment results from CI (scripts/experiment.mjs): reranker scores and Q&A title vectors.
+const expPath = arg('--exp');
+const exp = expPath ? JSON.parse(readFileSync(expPath, 'utf8')) : null;
+const RR = exp ? Object.values(exp.rerank)[0] : null;
+const titleStore = exp ? new Map(Object.entries(exp.titles).map(([id, v]) => [id, dequantize(v)])) : null;
+const RR_DEPTH = +(arg('--rr-depth') ?? 20);
+const RR_W = +(arg('--rr-w') ?? 1); // weight of the reranker rank in rank fusion with hybrid
+const dot = (a, b) => { let s = 0; for (let i = 0; i < a.length; i++) s += a[i] * b[i]; return s; };
+
+function runs(q, id) {
   const out = { bm25: dedupe(e.search({ query: q, limit: DEPTH + 5 }).results.map((r) => r.id)).slice(0, DEPTH) };
   if (store) {
     const qv = c.queries[q];
@@ -44,6 +53,28 @@ function runs(q) {
     const sem = nearest(store, dequantize(qv), { topK: 30 }).map((x) => (typeof x === 'string' ? x : x.id));
     out.semantic = dedupe(sem).slice(0, DEPTH);
     out.hybrid = dedupe(e.search({ query: q, limit: DEPTH + 5, semantic: sem, fusion: FUSION }).results.map((r) => r.id)).slice(0, DEPTH);
+    if (exp) {
+      const qvec = dequantize(qv);
+      // Semantic with Q&A titles: a Q&A unit scores the better of its body and title vector.
+      const sims = [];
+      for (const [uid, v] of store) {
+        const t = titleStore.get(base(uid));
+        sims.push([uid, Math.max(dot(qvec, v), t ? dot(qvec, t) : -1)]);
+      }
+      const semT = sims.sort((a, b) => b[1] - a[1]).slice(0, 30).map(([u]) => u);
+      out['sem+title'] = dedupe(semT).slice(0, DEPTH);
+      out['hyb+title'] = dedupe(e.search({ query: q, limit: DEPTH + 5, semantic: semT, fusion: FUSION }).results.map((r) => r.id)).slice(0, DEPTH);
+      // Reranking the hybrid top RR_DEPTH with the cross-encoder.
+      const sc = RR[id] || {};
+      const pool = dedupe(e.search({ query: q, limit: RR_DEPTH + 10, semantic: sem, fusion: FUSION }).results.map((r) => r.id)).slice(0, RR_DEPTH);
+      const scored = pool.map((u, r) => ({ u, r, s: sc[u] ?? -1 }));
+      out.rerank = [...scored].sort((a, b) => b.s - a.s || a.r - b.r).map((x) => x.u).slice(0, DEPTH);
+      const rrRank = new Map([...scored].sort((a, b) => b.s - a.s || a.r - b.r).map((x, i) => [x.u, i]));
+      out['hyb⊕rr'] = [...scored]
+        .map((x) => ({ u: x.u, f: 1 / (60 + x.r + 1) + RR_W / (60 + rrRank.get(x.u) + 1) }))
+        .sort((a, b) => b.f - a.f).map((x) => x.u).slice(0, DEPTH);
+      out.missingRR = pool.filter((u) => !(u in sc)).length;
+    }
   }
   return out;
 }
@@ -76,7 +107,10 @@ for (const [id, q, , type] of CANDIDATES) {
   const answers = Object.keys(rel).filter((u) => rel[u] === 2);
   const ideal = dcg(Object.values(rel).sort((a, b) => b - a).slice(0, 5));
   const row = { id, type, q };
-  for (const [sys, list] of Object.entries(runs(q))) {
+  const R = runs(q, id);
+  row.missingRR = R.missingRR ?? 0;
+  delete R.missingRR;
+  for (const [sys, list] of Object.entries(R)) {
     const g = (u) => rel[u] ?? 0;
     const top5 = list.slice(0, 5);
     const first2 = top5.findIndex((u) => g(u) === 2);
@@ -88,6 +122,7 @@ for (const [id, q, , type] of CANDIDATES) {
       r8: answers.length ? list.slice(0, 8).filter((u) => g(u) === 2).length / answers.length : null,
       rel5: +top5.some((u) => g(u) >= 1),
       old5: TRANSITION.has(id) ? null : top5.filter((u) => u.startsWith('IR-2014/')).length / top5.length,
+      unj5: top5.filter((u) => !(u in rel)).length / Math.max(1, top5.length),
       unj8: list.slice(0, 8).filter((u) => !(u in rel)).length / Math.min(8, list.length),
     };
     row[sys] = { ...m, top: top5.map((u) => `${u}${u in rel ? `=${rel[u]}` : '=?'}`) };
@@ -103,11 +138,12 @@ for (const [id, q, , type] of CANDIDATES) {
 }
 
 const fmt = (v, pct) => (pct ? `${(100 * v).toFixed(0)}%` : v.toFixed(3));
-const cols = [['ndcg5', 'nDCG@5', 0], ['succ1', 'Succ@1', 1], ['mrr5', 'MRR@5', 0], ['r5', 'R@5', 1], ['r8', 'R@8', 1], ['rel5', 'Rel@5', 1], ['old5', 'Old@5', 1], ['unj8', 'unjudged@8', 1]];
+const cols = [['ndcg5', 'nDCG@5', 0], ['succ1', 'Succ@1', 1], ['mrr5', 'MRR@5', 0], ['r5', 'R@5', 1], ['r8', 'R@8', 1], ['rel5', 'Rel@5', 1], ['old5', 'Old@5', 1], ['unj5', 'unjudg@5', 1], ['unj8', 'unjudg@8', 1]];
 console.log(`${perQ.length} questions${onlyType ? ` (${onlyType})` : ''}${split ? ` [${split}]` : ''}; ${perQ.filter((r) => r.no2).length} with no answering unit (No2)`);
-console.log(['system'.padEnd(9), ...cols.map(([, h]) => h.padStart(11))].join(''));
+if (exp) console.log(`reranker scores missing for ${perQ.reduce((a, r) => a + r.missingRR, 0)} of ${perQ.length * RR_DEPTH} pooled results`);
+console.log(['system'.padEnd(10), ...cols.map(([, h]) => h.padStart(11))].join(''));
 for (const [sys, t] of Object.entries(tot)) {
-  console.log([sys.padEnd(9), ...cols.map(([k, , p]) => (t[`${k}#`] ? fmt(t[k] / t[`${k}#`], p) : '-').padStart(11))].join(''));
+  console.log([sys.padEnd(10), ...cols.map(([k, , p]) => (t[`${k}#`] ? fmt(t[k] / t[`${k}#`], p) : '-').padStart(11))].join(''));
 }
 if (detail) {
   for (const r of perQ) {
