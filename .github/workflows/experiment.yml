@@ -1,0 +1,52 @@
+# Search experiments that need Workers AI (scripts/experiment.mjs). Runs when the
+# `experiment-run` branch is pushed, or on demand; results go to the `experiments` branch.
+# Uses the stored sources and vector cache; fetches and deploys nothing.
+name: Experiment
+
+on:
+  push:
+    branches: [experiment-run]
+  workflow_dispatch:
+
+concurrency:
+  group: experiment
+  cancel-in-progress: true
+
+permissions:
+  contents: write # the experiments branch
+
+jobs:
+  experiment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pdfplumber
+        run: pip install --quiet pdfplumber==0.11.10
+      - name: Check out the stored sources and vector cache
+        run: |
+          git fetch --depth=1 origin sources && git worktree add .sources FETCH_HEAD
+          git fetch --depth=1 origin vectors && git worktree add .vectors FETCH_HEAD
+      - name: Build data
+        run: node scripts/build-data.mjs --src .sources
+      - name: Run experiments
+        run: node scripts/experiment.mjs --vectors .vectors/vectors.json --out .exp
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Save results
+        run: |
+          cp data/remit.json .exp/remit.json
+          cd .exp
+          git init -q -b experiments
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Experiment results ${GITHUB_SHA::7} $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -q --force "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:experiments
+          cat experiment-log.txt >> "$GITHUB_STEP_SUMMARY"
