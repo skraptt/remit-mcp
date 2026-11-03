@@ -211,5 +211,57 @@
     "bytes": 591922,
     "sha256": "dcf5bf7e39fc3e2a5c2d3a18c7102cd6ac0e712adb52845900e01a1644244e27",
     "fetchedAt": "2026-10-30T23:26:18.213Z"
+  },
+  "ACER-TRUM": {
+    "id": "ACER-TRUM",
+    "title": "ACER Transaction Reporting User Manual (TRUM), latest version – for reporting under Implementing Regulation (EU) 2026/256 from 29 October 2027",
+    "short": "ACER TRUM",
+    "layer": "guidance",
+    "file": "raw/ACER-TRUM.pdf",
+    "url": "https://acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/REMIT-reporting-phase-1/ACER-REMIT-Transaction-User-Manual-v8-2026.pdf",
+    "sourceUrl": "https://acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/REMIT-reporting-phase-1/ACER-REMIT-Transaction-User-Manual-v8-2026.pdf",
+    "contentType": "application/pdf",
+    "bytes": 2386648,
+    "sha256": "2d551b5bef41914fbc470cdb64e48f12ad523f5b9dac4803ef59c860844faa0d",
+    "fetchedAt": "2026-11-03T14:32:08.452Z"
+  },
+  "ACER-TRUM-7": {
+    "id": "ACER-TRUM-7",
+    "title": "ACER Transaction Reporting User Manual (TRUM) v7.0 – applies until 29 October 2027 (reporting tables of Implementing Regulation 1348/2014)",
+    "short": "ACER TRUM 7.0",
+    "layer": "guidance",
+    "file": "raw/ACER-TRUM-7.pdf",
+    "url": "https://www.acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/Transaction%20Reporting%20User%20Manual%20(TRUM)/ACER-REMIT-TRUM-2024-v7.0.pdf",
+    "sourceUrl": "https://www.acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/Transaction%20Reporting%20User%20Manual%20(TRUM)/ACER-REMIT-TRUM-2024-v7.0.pdf",
+    "contentType": "application/pdf",
+    "bytes": 2830440,
+    "sha256": "fe7320b18308e9e37424023d9aef88a1f35d68cd48ea6ebe714e1b22fdb4a08d",
+    "fetchedAt": "2026-11-03T14:32:13.619Z"
+  },
+  "ACER-EXPOSURE": {
+    "id": "ACER-EXPOSURE",
+    "title": "ACER Guidance on reporting exposure under REMIT (Article 6 of Implementing Regulation (EU) 2026/256)",
+    "short": "ACER Exposure Guidance",
+    "layer": "guidance",
+    "file": "raw/ACER-EXPOSURE.pdf",
+    "url": "https://www.acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/REMIT-reporting-phase-1/ACER-REMIT-TRUM-Guidance-on-reporting-exposure-under-REMIT.pdf",
+    "sourceUrl": "https://www.acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/REMIT-reporting-phase-1/ACER-REMIT-TRUM-Guidance-on-reporting-exposure-under-REMIT.pdf",
+    "contentType": "application/pdf",
+    "bytes": 722414,
+    "sha256": "ecf543450437a878bc4910afa96c0329ca0b6a8ab8473d7761c642cf1f1b57e9",
+    "fetchedAt": "2026-11-03T14:32:15.510Z"
+  },
+  "ACER-MOP": {
+    "id": "ACER-MOP",
+    "title": "ACER Manual of Procedures (MoP) on transaction data, fundamental data and inside information reporting (Annex VII: data fields for inside information)",
+    "short": "ACER MoP",
+    "layer": "guidance",
+    "file": "raw/ACER-MOP.pdf",
+    "url": "https://www.acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/Manual%20of%20Procedures%20(MoP)%20on%20Data%20Reporting/ACER_REMIT_MoP-on-data-reporting.pdf",
+    "sourceUrl": "https://www.acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/Manual%20of%20Procedures%20(MoP)%20on%20Data%20Reporting/ACER_REMIT_MoP-on-data-reporting.pdf",
+    "contentType": "application/pdf",
+    "bytes": 1950190,
+    "sha256": "74c626e5b59e8d0a7c29a40684e996b2906fa15de2a26810d78695c214246c5f",
+    "fetchedAt": "2026-11-03T14:32:18.746Z"
   }
 }
