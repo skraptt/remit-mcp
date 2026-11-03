@@ -5,12 +5,13 @@
   "1": "relevant context or partial answer",
   "2": "answers the question"
  },
- "method": "Pool: union of top-5 BM25, semantic and hybrid results plus the source unit, 115 questions. Each pair graded by two independent LLM judges (agreement 92.2%, weighted kappa 0.93). A human reviewer (lawyer) graded all 88 disagreements plus a 60-pair blind calibration sample, then adjudicated 22 pairs on the answers-it boundary with full text. Second pass (search tuning, Nov 2026): 27 pairs newly in the top 5 graded by two fresh LLM judges; 26 agreed, 1 one-step disagreements resolved to the lower grade.",
+ "method": "Pool: union of top-5 BM25, semantic and hybrid results plus the source unit, 115 questions. Each pair graded by two independent LLM judges (agreement 92.2%, weighted kappa 0.93). A human reviewer (lawyer) graded all 88 disagreements plus a 60-pair blind calibration sample, then adjudicated 22 pairs on the answers-it boundary with full text. Second pass (search tuning, Nov 2026): 27 pairs newly in the top 5 graded by two fresh LLM judges; 26 agreed, 1 one-step disagreements resolved to the lower grade. Third pass (reporting manuals, 3 Nov 2026): 20 reporting-practice questions added (written before results were seen); 437 pairs (new top-5 results of the old questions, union of top-5 BM25/semantic/hybrid for the new ones, at manual weights 1, 0.7 and 0.5) graded by two fresh LLM judges with a rubric addendum on TRUM v7.0/v8.0; agreement 88.6%, weighted kappa 0.876; 50 one-step disagreements resolved to the lower grade.",
  "sources": {
   "judges": 985,
   "human": 126,
   "final": 22,
-  "judges2": 27
+  "judges2": 27,
+  "judges3": 437
  },
  "qrels": {
   "c001": {
@@ -23,7 +24,12 @@
    "IR-2026/ANNEX, Table 3": 1,
    "ACER-QA/3.3.40": 1,
    "IR-2026/11": 0,
-   "IR-2026/5": 1
+   "IR-2026/5": 1,
+   "ACER-TRUM/4": 2,
+   "ACER-QA/3.3.2": 0,
+   "ACER-GUIDANCE/3.2": 0,
+   "ACER-TRUM-7/3.2.1": 1,
+   "ACER-TRUM-7/3.1.2": 2
   },
   "c002": {
    "ACER-QA/2.3.9": 2,
@@ -35,7 +41,9 @@
    "ACER-QA/2.1.2": 1,
    "ACER-QA/2.4.24": 1,
    "REMIT/11": 0,
-   "ACER-QA/3.2.50": 0
+   "ACER-QA/3.2.50": 0,
+   "ACER-EXPOSURE/1.1": 0,
+   "ACER-TRUM-7/3.2.4": 0
   },
   "c003": {
    "ACER-QA/2.4.24": 2,
@@ -72,7 +80,10 @@
    "ACER-GUIDANCE/2.3.5": 1,
    "IR-2026/Recital 8": 0,
    "ACER-QA/2.4.31": 2,
-   "ACER-QA/2.3.9": 1
+   "ACER-QA/2.3.9": 1,
+   "ACER-QA/3.3.30": 0,
+   "ACER-MOP/Annex IV.VI": 0,
+   "ACER-MOP/6.2.6": 0
   },
   "c006": {
    "ACER-QA/2.4.11": 0,
@@ -129,7 +140,10 @@
    "ACER-QA/2.3.8": 0,
    "IR-2014/4": 1,
    "ACER-GUIDANCE/2.2.1": 1,
-   "ACER-QA/2.4.52": 2
+   "ACER-QA/2.4.52": 2,
+   "ACER-MOP/5.2": 0,
+   "ACER-TRUM-7/3.1.4": 1,
+   "ACER-TRUM/2.1.3.2": 1
   },
   "c011": {
    "IR-2026/5": 2,
@@ -164,7 +178,9 @@
    "ACER-GUIDANCE/2.2.1": 1,
    "ACER-QA/3.3.34": 0,
    "ACER-GUIDANCE/2.3.4": 0,
-   "ACER-OL-IR-2026/15": 0
+   "ACER-OL-IR-2026/15": 0,
+   "ACER-GUIDANCE/3.2": 0,
+   "ACER-EXPOSURE/3.1": 2
   },
   "c014": {
    "ACER-GUIDANCE/2.3.6": 0,
@@ -175,7 +191,8 @@
    "ACER-GUIDANCE/2.3.3": 2,
    "ACER-GUIDANCE/2.3.2": 1,
    "ACER-GUIDANCE/2.3.1": 1,
-   "REMIT-II/Recital 19": 1
+   "REMIT-II/Recital 19": 1,
+   "ACER-TRUM-7/3.2.3": 1
   },
   "c015": {
    "ACER-GUIDANCE/2.3.6": 0,
@@ -184,7 +201,8 @@
    "ACER-QA/3.3.24": 0,
    "ACER-QA/3.3.36": 1,
    "ACER-GUIDANCE/2.3.4": 0,
-   "ACER-GUIDANCE/2.2.1": 2
+   "ACER-GUIDANCE/2.2.1": 2,
+   "ACER-TRUM/5": 2
   },
   "c016": {
    "ACER-QA/3.3.34": 1,
@@ -195,7 +213,9 @@
    "ACER-GUIDANCE/2.3.1": 2,
    "ACER-GUIDANCE/2.3.3": 0,
    "ACER-QA/3.3.36": 2,
-   "ACER-QA/3.3.24": 0
+   "ACER-QA/3.3.24": 0,
+   "ACER-TRUM/7.2, field (18)": 1,
+   "ACER-TRUM/5": 0
   },
   "c017": {
    "IR-2014/4": 0,
@@ -208,7 +228,10 @@
    "ACER-QA/3.3.53.1": 0,
    "IR-2014/ANNEX, Table 3": 0,
    "IR-2014/Recital 3": 0,
-   "ACER-QA/3.3.50": 2
+   "ACER-QA/3.3.50": 2,
+   "ACER-MOP/5.2": 0,
+   "ACER-TRUM-7/3.1.4": 0,
+   "ACER-QA/3.3.41": 0
   },
   "c018": {
    "IR-2026/ANNEX, Table 5": 1,
@@ -230,7 +253,11 @@
    "ACER-QA/2.4.37": 0,
    "ACER-QA/2.1.2": 0,
    "REMIT/7c": 0,
-   "ACER-QA/2.4.46": 1
+   "ACER-QA/2.4.46": 1,
+   "ACER-MOP/6.1": 0,
+   "ACER-GUIDANCE/3.2": 0,
+   "ACER-MOP/5.1": 0,
+   "ACER-QA/3.3.31": 0
   },
   "c020": {
    "ACER-QA/3.3.41": 2,
@@ -249,7 +276,10 @@
    "ACER-QA/3.3.47": 2,
    "ACER-QA/3.3.41": 0,
    "ACER-QA/3.2.50": 0,
-   "IR-2014/Recital 3": 0
+   "IR-2014/Recital 3": 0,
+   "ACER-TRUM-7/3.2.4": 0,
+   "ACER-QA/3.6.1": 0,
+   "ACER-TRUM-7/3.1.2": 1
   },
   "c022": {
    "ACER-QA/3.3.44": 2,
@@ -261,7 +291,11 @@
    "ACER-QA/3.5.1": 0,
    "IR-2026/Recital 11": 0,
    "ACER-QA/3.3.19": 0,
-   "IR-2026/Recital 13": 0
+   "IR-2026/Recital 13": 0,
+   "ACER-QA/3.2.25": 0,
+   "ACER-TRUM/2.1.1": 0,
+   "ACER-TRUM/6.3, field (34)": 0,
+   "ACER-TRUM-7/4.3, field (27)": 0
   },
   "c023": {
    "IR-2014/2": 1,
@@ -273,7 +307,11 @@
    "IR-2026/Recital 11": 0,
    "ACER-QA/3.6": 0,
    "REMIT/5a": 0,
-   "REMIT-II/Recital 6": 0
+   "REMIT-II/Recital 6": 0,
+   "ACER-TRUM-7/3.1.8": 1,
+   "ACER-TRUM-7/3.1.4": 0,
+   "ACER-QA/3.2.25": 0,
+   "ACER-TRUM-7/3.1.9": 0
   },
   "c024": {
    "ACER-QA/3.7.15": 2,
@@ -294,7 +332,9 @@
    "REMIT/9": 1,
    "IR-2026/Recital 17": 0,
    "ACER-QA/2.4.25": 0,
-   "IR-2014/6": 0
+   "IR-2014/6": 0,
+   "ACER-TRUM-7/3.2": 1,
+   "ACER-MOP/6.1": 0
   },
   "c026": {
    "ACER-OL-IR-2026/3": 1,
@@ -305,7 +345,8 @@
    "ACER-GUIDANCE/8.2": 1,
    "ACER-QA/2.4.7": 0,
    "ACER-GUIDANCE/2.5": 0,
-   "ACER-QA/2.3.8": 1
+   "ACER-QA/2.3.8": 1,
+   "ACER-TRUM-7/3.2.3": 1
   },
   "c027": {
    "ACER-GUIDANCE/8.2": 1,
@@ -318,7 +359,8 @@
    "ACER-QA/2.4.46": 0,
    "ACER-QA/2.4.40": 0,
    "ACER-OL-IR-2026/18": 0,
-   "ACER-QA/2.4.24": 0
+   "ACER-QA/2.4.24": 0,
+   "REMIT/9": 1
   },
   "c028": {
    "ACER-GUIDANCE/8.5": 2,
@@ -341,7 +383,8 @@
    "ACER-GUIDANCE/8.2": 2,
    "ACER-QA/3.2.25": 0,
    "ACER-QA/2.4.10": 1,
-   "ACER-QA/2.4.27": 0
+   "ACER-QA/2.4.27": 0,
+   "ACER-TRUM-7/3.2.4": 1
   },
   "c030": {
    "ACER-MANUAL-2026/3": 0,
@@ -366,7 +409,8 @@
    "ACER-QA/2.4.34": 0,
    "ACER-QA/2.4.11": 0,
    "ACER-QA/2.4.16": 0,
-   "ACER-UMM-GUIDANCE/4": 0
+   "ACER-UMM-GUIDANCE/4": 0,
+   "ACER-TRUM-7/3.2.4": 0
   },
   "c032": {
    "ACER-GUIDANCE/8.6": 0,
@@ -378,7 +422,8 @@
    "ACER-GUIDANCE/9.3.1": 0,
    "ACER-QA/3.2.30": 0,
    "DR-2026/3": 1,
-   "ACER-GUIDANCE/8.3": 1
+   "ACER-GUIDANCE/8.3": 1,
+   "ACER-TRUM-7/3.2.4": 0
   },
   "c033": {
    "ACER-QA/2.4.48": 0,
@@ -394,7 +439,8 @@
    "ACER-QA/2.3.9": 0,
    "ACER-MANUAL-2026/7": 0,
    "ACER-QA/3.2.25": 0,
-   "ACER-GUIDANCE/8.2": 0
+   "ACER-GUIDANCE/8.2": 0,
+   "ACER-TRUM-7/3.2.4": 1
   },
   "c034": {
    "ACER-QA/2.4.36": 2,
@@ -404,7 +450,9 @@
    "ACER-GUIDANCE/8.6": 1,
    "ACER-QA/2.4.8": 0,
    "ACER-QA/2.4.57": 0,
-   "ACER-GUIDANCE/8.5": 0
+   "ACER-GUIDANCE/8.5": 0,
+   "DR-2026/ANNEX I": 0,
+   "ACER-MANUAL-2026/3": 1
   },
   "c035": {
    "ACER-QA/2.4.48": 0,
@@ -429,7 +477,11 @@
    "REMIT-II/Recital 6": 0,
    "ACER-QA/2.4.27": 0,
    "ACER-QA/3.2.36": 1,
-   "ACER-GUIDANCE/2.4": 0
+   "ACER-GUIDANCE/2.4": 0,
+   "ACER-TRUM-7/2": 0,
+   "ACER-TRUM-7/3.2.4": 0,
+   "ACER-QA/2.4.11": 0,
+   "ACER-MOP/5.1": 0
   },
   "c037": {
    "REMIT-II/Recital 2": 0,
@@ -451,7 +503,9 @@
    "ACER-QA/2.4.24": 0,
    "ACER-QA/2.4.58": 0,
    "IR-2014/ANNEX, Table 1": 0,
-   "REMIT/9": 1
+   "REMIT/9": 1,
+   "ACER-TRUM-7/3.2.4": 0,
+   "ACER-TRUM-7/3.2.1": 0
   },
   "c038": {
    "ACER-QA/2.4.47": 2,
@@ -489,7 +543,11 @@
    "DR-2026/38": 0,
    "DR-2026/4": 0,
    "ACER-OL-DR-2026/5′": 0,
-   "IR-2014/1": 0
+   "IR-2014/1": 0,
+   "ACER-TRUM-7/3.2.4": 0,
+   "ACER-MOP/6.1": 0,
+   "ACER-EXPOSURE/1.2": 0,
+   "ACER-WHAT-TO-REPORT-2026/1.1": 0
   },
   "c041": {
    "ACER-QA/2.4.35": 1,
@@ -516,7 +574,8 @@
    "ACER-WHAT-TO-REPORT-2026/1.1": 0,
    "ACER-QA/2.4.25": 0,
    "ACER-QA/3.2.20": 1,
-   "ACER-QA/3.2.25": 1
+   "ACER-QA/3.2.25": 1,
+   "ACER-TRUM-7/3.2.4": 0
   },
   "c043": {
    "DR-2026/13": 1,
@@ -529,7 +588,11 @@
    "DR-2026/38": 0,
    "DR-2026/17": 1,
    "ACER-QA/3.6.1": 0,
-   "DR-2026/4": 1
+   "DR-2026/4": 1,
+   "ACER-EXPOSURE/1.1": 0,
+   "IR-2014/1": 0,
+   "ACER-TRUM/1.1": 0,
+   "ACER-TRUM-7/3.2.3": 0
   },
   "c044": {
    "ACER-OL-IR-2026/3": 0,
@@ -543,7 +606,11 @@
    "ACER-QA/3.2.20": 0,
    "ACER-QA/3.2.27": 1,
    "IR-2026/Recital 1": 0,
-   "ACER-QA/1": 0
+   "ACER-QA/1": 0,
+   "ACER-EXPOSURE/1.1": 0,
+   "IR-2014/6": 0,
+   "ACER-QA/2.4.11": 0,
+   "ACER-MOP/2": 0
   },
   "c045": {
    "ACER-QA/3.2.24": 1,
@@ -569,7 +636,8 @@
    "ACER-MANUAL-2026/4": 0,
    "DR-2026/3": 0,
    "ACER-QA/2.4.14": 0,
-   "ACER-QA/3.2.50": 0
+   "ACER-QA/3.2.50": 0,
+   "ACER-TRUM-7/3.2": 1
   },
   "c047": {
    "ACER-OL-ALGO/1": 0,
@@ -584,7 +652,10 @@
    "ACER-OL-IR-2026/8": 0,
    "ACER-GUIDANCE/9.4.3.1": 0,
    "ACER-QA/3.2.26": 2,
-   "ACER-GN-WASH/5": 0
+   "ACER-GN-WASH/5": 0,
+   "ACER-TRUM/2.1.2.2": 0,
+   "ACER-TRUM-7/3.2.1": 1,
+   "ACER-TRUM-7/3.2.3": 0
   },
   "c048": {
    "IR-2026/14": 2,
@@ -606,7 +677,8 @@
    "ACER-QA/2.5.3": 0,
    "IR-2014/1": 0,
    "ACER-QA/3.2.26": 0,
-   "IR-2026/1": 0
+   "IR-2026/1": 0,
+   "ACER-TRUM-7/3.2.4": 0
   },
   "c050": {
    "ACER-QA/3.2.37": 1,
@@ -618,7 +690,11 @@
    "IR-2014/Recital 3": 0,
    "ACER-QA/3.6.1": 0,
    "ACER-OL-IR-2026/7": 1,
-   "IR-2026/10": 0
+   "IR-2026/10": 0,
+   "ACER-TRUM-7/5": 0,
+   "IR-2026/2": 1,
+   "ACER-TRUM/2": 0,
+   "ACER-TRUM-7/3.1.6": 0
   },
   "c051": {
    "ACER-OL-IR-2026/9": 0,
@@ -631,7 +707,10 @@
    "ACER-QA/3.2.5": 0,
    "IR-2014/5": 0,
    "ACER-QA/2.4.27": 2,
-   "ACER-QA/3.2.34": 1
+   "ACER-QA/3.2.34": 1,
+   "ACER-TRUM-7/5": 0,
+   "ACER-TRUM-7/3.2.4": 1,
+   "ACER-TRUM-7/3.1.4": 0
   },
   "c052": {
    "IR-2026/Recital 1": 0,
@@ -646,7 +725,12 @@
    "IR-2026/11": 0,
    "ACER-OL-IR-2026/15": 0,
    "ACER-GN-CAPACITY/5": 0,
-   "ACER-QA/3.2.40": 2
+   "ACER-QA/3.2.40": 2,
+   "ACER-EXPOSURE/1.1": 0,
+   "IR-2014/6": 0,
+   "ACER-TRUM-7/2": 0,
+   "ACER-TRUM/1.1": 0,
+   "ACER-MOP/2": 0
   },
   "c053": {
    "ACER-GUIDANCE/9.2.1": 0,
@@ -659,7 +743,11 @@
    "ACER-WHAT-TO-REPORT-2026/1.1": 0,
    "ACER-QA/3.3.14": 0,
    "REMIT/15": 0,
-   "ACER-QA/3.2.44": 1
+   "ACER-QA/3.2.44": 1,
+   "ACER-TRUM-7/3.2.3": 0,
+   "ACER-OL-IR-2026/14": 0,
+   "ACER-TRUM-7/3.1.6": 0,
+   "ACER-TRUM-7/3.1.9": 0
   },
   "c054": {
    "ACER-QA/2.4.52": 0,
@@ -674,7 +762,11 @@
    "ACER-QA/3.2.42": 2,
    "ACER-OL-DR-2026/3′": 0,
    "ACER-GUIDANCE/9.3": 0,
-   "ACER-OL-IR-2026/2": 0
+   "ACER-OL-IR-2026/2": 0,
+   "ACER-EXPOSURE/1.1": 0,
+   "ACER-MOP/5.2": 0,
+   "ACER-TRUM-7/2": 0,
+   "ACER-TRUM-7/3.3.1": 0
   },
   "c055": {
    "ACER-QA/3.2.50": 2,
@@ -699,7 +791,12 @@
    "REMIT/3": 0,
    "IR-2026/6": 0,
    "ACER-QA/3.3.11": 2,
-   "ACER-GUIDANCE/5.5.2": 0
+   "ACER-GUIDANCE/5.5.2": 0,
+   "ACER-EXPOSURE/1.1": 0,
+   "ACER-TRUM-7/2": 0,
+   "ACER-TRUM-7/3.2.1": 0,
+   "ACER-WHAT-TO-REPORT-2026/1.1": 0,
+   "ACER-TRUM-7/3.1.6": 1
   },
   "c057": {
    "IR-2026/Recital 9": 1,
@@ -710,7 +807,8 @@
    "IR-2014/6": 0,
    "ACER-QA/2.4.24": 1,
    "IR-2014/Recital 3": 0,
-   "ACER-QA/3.3.12": 2
+   "ACER-QA/3.3.12": 2,
+   "ACER-TRUM/3": 0
   },
   "c058": {
    "IR-2026/Recital 14": 2,
@@ -742,7 +840,8 @@
    "IR-2026/5": 2,
    "ACER-QA/3.3.41": 0,
    "ACER-QA/3.2.41": 0,
-   "IR-2026/Recital 1": 0
+   "IR-2026/Recital 1": 0,
+   "ACER-QA/3.7.10": 0
   },
   "c061": {
    "ACER-GUIDANCE/2.3.6": 1,
@@ -766,7 +865,11 @@
    "ACER-OL-IR-2026/2": 0,
    "ACER-OL-IR-2026/8": 1,
    "IR-2014/1": 0,
-   "ACER-GUIDANCE/8.7": 0
+   "ACER-GUIDANCE/8.7": 0,
+   "ACER-TRUM-7/3.3.2": 1,
+   "ACER-WHAT-TO-REPORT-2026/1.1": 0,
+   "ACER-QA/3.3.47": 0,
+   "ACER-EXPOSURE/2.3": 0
   },
   "c063": {
    "IR-2026/2": 1,
@@ -778,7 +881,8 @@
    "ACER-QA/3.3.30": 2,
    "ACER-QA/3.4.6": 1,
    "IR-2026/Recital 9": 1,
-   "IR-2026/12": 1
+   "IR-2026/12": 1,
+   "ACER-MOP/6.2.4": 1
   },
   "c064": {
    "ACER-QA/3.3.42": 1,
@@ -799,7 +903,9 @@
    "ACER-GUIDANCE/2.2.1": 1,
    "IR-2026/ANNEX, Table 5": 0,
    "IR-2014/9": 0,
-   "ACER-QA/3.3.47": 1
+   "ACER-QA/3.3.47": 1,
+   "ACER-TRUM/4": 1,
+   "ACER-TRUM-7/7": 1
   },
   "c066": {
    "REMIT-II/Recital 8": 0,
@@ -808,7 +914,11 @@
    "ACER-QA/3.3.6": 0,
    "ACER-QA/3.3.45": 2,
    "REMIT-II/Recital 12": 1,
-   "ACER-QA/3.3.5": 0
+   "ACER-QA/3.3.5": 0,
+   "ACER-TRUM-7/6": 0,
+   "ACER-TRUM-7/2": 0,
+   "IR-2014/Recital 3": 1,
+   "ACER-WHAT-TO-REPORT-2026/1.1": 1
   },
   "c067": {
    "IR-2026/Recital 12": 0,
@@ -841,7 +951,8 @@
    "IR-2026/11": 2,
    "ACER-QA/3.4.3": 1,
    "IR-2014/9": 1,
-   "IR-2026/12": 2
+   "IR-2026/12": 2,
+   "ACER-MOP/6.1": 2
   },
   "c070": {
    "ACER-OL-IR-2026/4": 2,
@@ -853,7 +964,11 @@
    "IR-2026/Recital 11": 0,
    "ACER-OL-IR-2026/13": 0,
    "ACER-QA/3.3.44": 1,
-   "IR-2026/Recital 13": 1
+   "IR-2026/Recital 13": 1,
+   "ACER-EXPOSURE/3": 0,
+   "REMIT-II/Recital 6": 0,
+   "ACER-TRUM/9.1, field (2)": 0,
+   "ACER-TRUM-7/7.1, field (2)": 0
   },
   "c071": {
    "ACER-QA/2.4.4": 2,
@@ -877,7 +992,9 @@
    "ACER-QA/2.1.1": 0,
    "REMIT/13": 1,
    "ACER-GN-LAYERING/0": 0,
-   "ACER-QA/3.3.38": 0
+   "ACER-QA/3.3.38": 0,
+   "ACER-QA/2.1.4": 0,
+   "ACER-TRUM-7/1.3": 0
   },
   "c073": {
    "IR-2026/2": 0,
@@ -888,7 +1005,9 @@
    "ACER-QA/2.4.56": 2,
    "ACER-QA/2.3.9": 0,
    "IR-2026/6": 0,
-   "ACER-QA/3.7.21": 1
+   "ACER-QA/3.7.21": 1,
+   "ACER-GUIDANCE/5.5.1": 1,
+   "ACER-TRUM/2.3": 0
   },
   "c074": {
    "ACER-QA/3.7.3": 2,
@@ -898,7 +1017,9 @@
    "ACER-GUIDANCE/4.2.2": 1,
    "ACER-UMM-GUIDANCE/1.2": 0,
    "ACER-UMM-GUIDANCE/4": 1,
-   "ACER-GUIDANCE/4.3": 0
+   "ACER-GUIDANCE/4.3": 0,
+   "ACER-MOP/7.4": 1,
+   "ACER-MOP/7.3.2": 0
   },
   "c075": {
    "REMIT/4": 1,
@@ -910,7 +1031,9 @@
    "ACER-GUIDANCE/4.3": 1,
    "IR-2026/14": 2,
    "ACER-GUIDANCE/5.2.2": 0,
-   "ACER-GUIDANCE/3.3": 0
+   "ACER-GUIDANCE/3.3": 0,
+   "ACER-MOP/7.1": 1,
+   "ACER-MOP/2": 0
   },
   "c076": {
    "ACER-GUIDANCE/4.2.2": 1,
@@ -931,7 +1054,9 @@
    "REMIT/10": 0,
    "ACER-GUIDANCE/4.2.2": 1,
    "ACER-QA/3.7.9": 2,
-   "ACER-GUIDANCE/4.1": 1
+   "ACER-GUIDANCE/4.1": 1,
+   "ACER-MOP/7.2": 0,
+   "ACER-QA/3.7.12": 0
   },
   "c078": {
    "ACER-GUIDANCE/2.2.1": 0,
@@ -944,7 +1069,8 @@
    "ACER-QA/3.7.14": 0,
    "ACER-QA/3.3.40": 0,
    "ACER-QA/1": 0,
-   "ACER-GUIDANCE/2.1": 0
+   "ACER-GUIDANCE/2.1": 0,
+   "ACER-QA/2.4.51": 0
   },
   "c079": {
    "ACER-GUIDANCE/2.3": 0,
@@ -958,7 +1084,8 @@
    "REMIT/2": 0,
    "ACER-QA/2.4.3′": 1,
    "ACER-GUIDANCE/4.1": 1,
-   "IR-2014/8": 0
+   "IR-2014/8": 0,
+   "ACER-MOP/Annex VII, field (18)": 0
   },
   "c080": {
    "ACER-GUIDANCE/3.3.4": 1,
@@ -1002,7 +1129,9 @@
    "ACER-GUIDANCE/3.3.1": 1,
    "ACER-GUIDANCE/6.2.4": 0,
    "ACER-GUIDANCE/3.3.4": 1,
-   "ACER-QA/3.7.15": 0
+   "ACER-QA/3.7.15": 0,
+   "ACER-TRUM-7/2": 0,
+   "IR-2026/Recital 1": 0
   },
   "c084": {
    "ACER-GUIDANCE/6.2.4": 0,
@@ -1051,7 +1180,9 @@
    "ACER-QA/3.7.14": 0,
    "ACER-QA/3.7.9": 0,
    "REMIT-II/Recital 19": 1,
-   "ACER-MANUAL-2026/3": 0
+   "ACER-MANUAL-2026/3": 0,
+   "ACER-TRUM-7/3.2.3": 0,
+   "ACER-QA/3.7.12": 0
   },
   "g001": {
    "ACER-QA/2.4.54": 1,
@@ -1064,7 +1195,8 @@
    "ACER-GUIDANCE/2.3.1": 0,
    "ACER-QA/3.2.25": 0,
    "ACER-GUIDANCE/5.2.1": 0,
-   "ACER-GUIDANCE/2.3.3": 0
+   "ACER-GUIDANCE/2.3.3": 0,
+   "IR-2026/2": 1
   },
   "g002": {
    "ACER-GUIDANCE/5.4": 0,
@@ -1099,7 +1231,8 @@
    "REMIT/2": 1,
    "ACER-GUIDANCE/5.2.1": 0,
    "ACER-GUIDANCE/3.3": 1,
-   "ACER-GUIDANCE/1": 0
+   "ACER-GUIDANCE/1": 0,
+   "ACER-GUIDANCE/4.3": 0
   },
   "g005": {
    "ACER-GUIDANCE/5.3.1": 0,
@@ -1111,7 +1244,9 @@
    "REMIT/2": 1,
    "ACER-GUIDANCE/3.3.4": 2,
    "ACER-GUIDANCE/3.3.3": 1,
-   "ACER-GUIDANCE/6.3.1": 0
+   "ACER-GUIDANCE/6.3.1": 0,
+   "ACER-GUIDANCE/3.3": 1,
+   "ACER-MOP/7.2": 0
   },
   "g006": {
    "ACER-GUIDANCE/4.2.2": 1,
@@ -1197,7 +1332,8 @@
    "ACER-GUIDANCE/6.2.4": 2,
    "ACER-GUIDANCE/6.2": 2,
    "ACER-GUIDANCE/6.4.1": 1,
-   "ACER-GUIDANCE/6.2.1": 1
+   "ACER-GUIDANCE/6.2.1": 1,
+   "ACER-MOP/2": 0
   },
   "g013": {
    "ACER-GUIDANCE/6.2.5": 2,
@@ -1222,7 +1358,10 @@
    "ACER-GUIDANCE/6.2": 1,
    "ACER-GN-LAYERING/0": 0,
    "REMIT-II/Recital 19": 0,
-   "ACER-QA/2.4.44": 1
+   "ACER-QA/2.4.44": 1,
+   "ACER-EXPOSURE/1.1": 0,
+   "ACER-TRUM-7/2": 0,
+   "ACER-MOP/2": 0
   },
   "g015": {
    "ACER-GUIDANCE/9.3.3": 2,
@@ -1250,7 +1389,8 @@
    "ACER-GUIDANCE/9.4.4.1": 2,
    "ACER-GUIDANCE/9.2.1": 1,
    "ACER-QA/2.1.1": 0,
-   "ACER-GUIDANCE/9.4.4.3": 1
+   "ACER-GUIDANCE/9.4.4.3": 1,
+   "REMIT/1": 0
   },
   "g017": {
    "ACER-GUIDANCE/2.4": 0,
@@ -1281,7 +1421,8 @@
    "ACER-GN-WASH/0": 0,
    "ACER-GN-WASH/1": 2,
    "ACER-GN-WASH/3.1": 1,
-   "ACER-GN-WASH/6": 1
+   "ACER-GN-WASH/6": 1,
+   "ACER-TRUM-7/3.2": 0
   },
   "g019": {
    "ACER-GN-CAPACITY/5": 2,
@@ -1311,7 +1452,8 @@
    "ACER-GUIDANCE/5.5.2": 0,
    "REMIT/5": 1,
    "ACER-GN-LAYERING/0": 0,
-   "ACER-GUIDANCE/6.2.2": 1
+   "ACER-GUIDANCE/6.2.2": 1,
+   "ACER-TRUM-7/2": 0
   },
   "t001": {
    "ACER-OL-IR-2026/17": 1,
@@ -1325,7 +1467,10 @@
    "ACER-GUIDANCE/3.3.5": 0,
    "IR-2026/Recital 3": 0,
    "ACER-UMM-GUIDANCE/3": 0,
-   "IR-2026/Recital 9": 1
+   "IR-2026/Recital 9": 1,
+   "ACER-EXPOSURE/2.2": 1,
+   "ACER-TRUM/1.1": 1,
+   "ACER-TRUM/1.2": 1
   },
   "t002": {
    "ACER-QA/1": 0,
@@ -1339,7 +1484,11 @@
    "IR-2026/Recital 3": 0,
    "ACER-QA/2.5.5": 0,
    "ACER-OL-DR-2026/3′": 1,
-   "ACER-GN-LAYERING/0": 0
+   "ACER-GN-LAYERING/0": 0,
+   "ACER-TRUM-7/2": 0,
+   "REMIT/1": 0,
+   "ACER-TRUM/1.1": 1,
+   "ACER-TRUM-7/3.2.3": 0
   },
   "t003": {
    "ACER-QA/2.5.3": 0,
@@ -1347,7 +1496,10 @@
    "ACER-OL-IR-2026/18": 1,
    "ACER-OL-IR-2026/20": 1,
    "ACER-OL-IR-2026/19": 2,
-   "ACER-OL-IR-2026/17": 2
+   "ACER-OL-IR-2026/17": 2,
+   "ACER-EXPOSURE/2.1": 1,
+   "ACER-EXPOSURE/6": 0,
+   "ACER-EXPOSURE/2.3": 2
   },
   "t004": {
    "ACER-OL-IR-2026/9": 1,
@@ -1360,7 +1512,11 @@
    "REMIT-II/Recital 12": 0,
    "ACER-QA/2.5.3": 0,
    "IR-2026/9": 2,
-   "IR-2026/ANNEX, Table 5": 1
+   "IR-2026/ANNEX, Table 5": 1,
+   "ACER-EXPOSURE/3": 0,
+   "ACER-QA/3.5.1": 0,
+   "ACER-TRUM-7/3.2.1": 0,
+   "ACER-TRUM-7/3.3.1": 0
   },
   "t005": {
    "ACER-OL-IR-2026/22": 2,
@@ -1401,7 +1557,329 @@
    "ACER-OL-IR-2026/23": 1,
    "IR-2026/15": 0,
    "ACER-GUIDANCE/8.7": 0,
-   "ACER-OL-DR-2026/0": 0
+   "ACER-OL-DR-2026/0": 0,
+   "ACER-TRUM-7/2": 0,
+   "ACER-EXPOSURE/1.2": 0,
+   "ACER-TRUM/1.1": 0,
+   "ACER-QA/3.4.3": 0
+  },
+  "r001": {
+   "IR-2026/ANNEX, Table 2": 0,
+   "ACER-TRUM/6.3, field (23)": 0,
+   "IR-2026/ANNEX, Table 5": 0,
+   "ACER-TRUM/6.3, field (33)": 0,
+   "ACER-TRUM-7/5.2, field (11)": 1,
+   "ACER-TRUM-7/4.4, field (31)": 2,
+   "ACER-TRUM/6.4, field (38)": 2,
+   "IR-2026/ANNEX, Table 4": 0,
+   "ACER-TRUM-7/5.1, field (7)": 0,
+   "IR-2026/ANNEX, Table 1": 0,
+   "ACER-TRUM/7.2, field (14)": 0
+  },
+  "r005": {
+   "ACER-MOP/Annex VII": 1,
+   "ACER-QA/3.4.6": 0,
+   "IR-2026/2": 0,
+   "ACER-QA/3.7.10": 0,
+   "ACER-GUIDANCE/4.2.2": 0,
+   "ACER-MOP/Annex VII, field (13)": 0,
+   "ACER-GUIDANCE/3.2": 0,
+   "ACER-MOP/Annex VII, field (1)": 0,
+   "ACER-UMM-GUIDANCE/3.1": 0,
+   "ACER-MOP/Annex IV.VI": 0,
+   "ACER-MOP/Annex VII, field (3)": 0,
+   "ACER-MOP/Annex VII, field (4/b)": 2,
+   "ACER-UMM-GUIDANCE/3": 0,
+   "DR-2026/ANNEX II": 1,
+   "ACER-MOP/Annex VII, field (6)": 0
+  },
+  "r010": {
+   "ACER-EXPOSURE/1.1": 0,
+   "ACER-EXPOSURE/3": 2,
+   "ACER-EXPOSURE/3.3": 1,
+   "ACER-EXPOSURE/8": 1,
+   "IR-2026/6": 2,
+   "ACER-EXPOSURE/3.4": 0,
+   "ACER-EXPOSURE/2.1": 2,
+   "ACER-QA/3.3.26": 1,
+   "IR-2014/Recital 3": 0,
+   "ACER-WHAT-TO-REPORT-2026/1.1": 0,
+   "ACER-QA/2.4.39": 0,
+   "ACER-EXPOSURE/8, field (2)": 1,
+   "ACER-QA/2.4.17": 0,
+   "ACER-OL-IR-2026/18": 0,
+   "ACER-EXPOSURE/3.2": 2,
+   "ACER-OL-IR-2026/17": 0
+  },
+  "r015": {
+   "ACER-TRUM-7/4.6, field (48)": 2,
+   "ACER-TRUM/7.5, field (46)": 1,
+   "ACER-TRUM-7/5.5, field (41)": 2,
+   "ACER-GUIDANCE/2.2.1": 0,
+   "REMIT-II/Recital 29": 0,
+   "ACER-EXPOSURE/3.3": 0,
+   "IR-2026/ANNEX, Table 5": 0,
+   "IR-2026/6": 0,
+   "ACER-QA/3.3.41": 0,
+   "IR-2014/3": 0,
+   "ACER-GUIDANCE/2.3.4": 0,
+   "ACER-WHAT-TO-REPORT-2026/1.1": 0,
+   "ACER-TRUM/2.3": 1,
+   "ACER-QA/3.4.7": 0
+  },
+  "r019": {
+   "ACER-MOP/5.2": 0,
+   "IR-2014/ANNEX, Table 2": 1,
+   "ACER-TRUM/2.2.1": 0,
+   "IR-2026/ANNEX, Table 2": 0,
+   "IR-2014/ANNEX, Table 1": 1,
+   "ACER-TRUM-7/4.3, field (25)": 2,
+   "ACER-TRUM-7/3.2.3": 0,
+   "ACER-TRUM/2": 0,
+   "ACER-TRUM/7": 0,
+   "ACER-QA/3.3.31": 0,
+   "ACER-TRUM-7/3.1": 0,
+   "ACER-TRUM/6": 0,
+   "ACER-TRUM/6.4, field (46)": 1,
+   "IR-2026/ANNEX, Table 1": 0,
+   "ACER-TRUM/6.3, field (28)": 1,
+   "ACER-TRUM-7/5.3, field (25)": 2,
+   "ACER-GN-WASH/3.3": 0,
+   "ACER-TRUM/6.3, field (27)": 1
+  },
+  "r002": {
+   "IR-2014/ANNEX, Table 2": 1,
+   "ACER-MOP/Annex III.II": 1,
+   "ACER-TRUM-7/5.1, field (5)": 0,
+   "ACER-TRUM-7/4.1, field (1)": 2,
+   "ACER-TRUM-7/5.1, field (2)": 1,
+   "ACER-QA/3.5.2": 0,
+   "ACER-TRUM-7/4.1, field (9)": 0,
+   "IR-2014/ANNEX, Table 1": 1,
+   "ACER-MOP/Annex III.I": 1,
+   "ACER-TRUM-7/5.1, field (4)": 0,
+   "ACER-QA/2.4.8": 2,
+   "ACER-TRUM-7/4.3, field (27)": 0,
+   "ACER-TRUM/7.1, field (4)": 0,
+   "ACER-TRUM/6.1, field (2)": 1,
+   "ACER-TRUM-7/5.1, field (1)": 2
+  },
+  "r006": {
+   "ACER-QA/3.7.10": 0,
+   "ACER-GUIDANCE/5.5.2": 0,
+   "ACER-MOP/Annex VII, field (13)": 1,
+   "ACER-GUIDANCE/3.3.4": 0,
+   "ACER-MOP/Annex VII, field (1)": 2,
+   "ACER-QA/3.7.18": 0,
+   "DR-2026/18": 0,
+   "ACER-GUIDANCE/9.3": 0,
+   "IR-2014/9": 0,
+   "ACER-OL-IR-2026/16": 0
+  },
+  "r009": {
+   "IR-2026/1": 0,
+   "ACER-OL-IR-2026/12": 2,
+   "REMIT/7e": 0,
+   "REMIT/7c": 2,
+   "REMIT-II/Recital 20": 1,
+   "ACER-TRUM/5": 2,
+   "ACER-MOP/6.2.5": 0,
+   "IR-2014/Recital 8": 0,
+   "REMIT/7d": 1
+  },
+  "r012": {
+   "ACER-EXPOSURE/5": 1,
+   "ACER-EXPOSURE/2.2": 0,
+   "ACER-OL-IR-2026/19": 2,
+   "IR-2026/Recital 12": 1,
+   "ACER-EXPOSURE/3": 1,
+   "IR-2026/6": 2,
+   "ACER-GUIDANCE/2.5": 0,
+   "ACER-EXPOSURE/2.1": 0,
+   "ACER-EXPOSURE/6": 0,
+   "ACER-OL-IR-2026/18": 0,
+   "ACER-OL-IR-2026/17": 0,
+   "ACER-EXPOSURE/2.3": 2
+  },
+  "r016": {
+   "ACER-QA/3.2.40": 0,
+   "ACER-TRUM/2.1.2.3": 0,
+   "ACER-MOP/5.2": 0,
+   "ACER-MANUAL-2026/4": 0,
+   "ACER-QA/2.5.5": 0,
+   "ACER-EXPOSURE/3": 0,
+   "ACER-GN-LAYERING/3.2": 0,
+   "ACER-QA/3.3.2": 0,
+   "ACER-TRUM/1.1": 0,
+   "ACER-TRUM/2": 0,
+   "ACER-WHAT-TO-REPORT-2026/1.1": 0,
+   "ACER-GUIDANCE/5.2.1": 0,
+   "ACER-QA/3.3.38": 0,
+   "ACER-TRUM/3": 0,
+   "ACER-GUIDANCE/5.3.1": 0,
+   "ACER-TRUM/6.7, field (81)": 0,
+   "ACER-OL-IR-2026/14": 0,
+   "ACER-TRUM/1.2": 0,
+   "ACER-TRUM/6.1, field (1)": 0
+  },
+  "r004": {
+   "ACER-MOP/5.2": 0,
+   "REMIT/15": 0,
+   "ACER-GUIDANCE/6.3.1": 0,
+   "ACER-QA/3.3.19": 0,
+   "IR-2014/6": 0,
+   "ACER-TRUM-7/2": 0,
+   "ACER-GN-LAYERING/4": 0,
+   "ACER-GN-LAYERING/2": 0,
+   "ACER-GUIDANCE/6.2.1": 0,
+   "ACER-TRUM-7/3.2.1": 0,
+   "ACER-TRUM-7/3.2.3": 0,
+   "ACER-WHAT-TO-REPORT-2026/1.1": 0,
+   "ACER-TRUM-7/3.1.10": 2,
+   "ACER-TRUM-7/3.3.1": 0,
+   "ACER-TRUM-7/3.1": 0,
+   "IR-2014/7": 1,
+   "ACER-TRUM/6.2, field (22)": 0,
+   "ACER-TRUM/2.1.2.4": 0
+  },
+  "r008": {
+   "ACER-MOP/Annex I, 2": 0,
+   "ACER-MOP/Annex VII, field (10)": 0,
+   "ACER-GUIDANCE/4.2.2": 0,
+   "ACER-UMM-GUIDANCE/3.2′": 0,
+   "ACER-UMM-GUIDANCE/1.1": 0,
+   "ACER-GUIDANCE/2.1": 0,
+   "ACER-TRUM/1.1": 0,
+   "ACER-GUIDANCE/3.2": 0,
+   "ACER-MOP/Annex VII, field (1)": 2,
+   "ACER-QA/1": 0,
+   "ACER-MOP/Annex VII, field (18)": 0,
+   "ACER-MOP/Annex II, 2": 0,
+   "ACER-UMM-GUIDANCE/3": 0,
+   "ACER-MOP/2": 0,
+   "ACER-MOP/Annex VII, field (2)": 0,
+   "ACER-MOP/7.3.2": 0,
+   "ACER-UMM-GUIDANCE/1.2": 0
+  },
+  "r013": {
+   "ACER-TRUM/8.1, field (4)": 0,
+   "IR-2014/1": 0,
+   "ACER-QA/3.2.40": 0,
+   "ACER-MANUAL-2026/4": 0,
+   "IR-2014/6": 0,
+   "ACER-EXPOSURE/7": 0,
+   "IR-2026/Recital 1": 0,
+   "ACER-EXPOSURE/1.2": 0,
+   "ACER-TRUM/1.1": 0,
+   "REMIT-II/Recital 15": 0,
+   "ACER-WHAT-TO-REPORT-2026/1.1": 0,
+   "ACER-MOP/5.1": 0,
+   "ACER-QA/3.2.44": 0,
+   "ACER-MOP/3.1": 2,
+   "IR-2026/8": 1
+  },
+  "r017": {
+   "ACER-GUIDANCE/7.3": 1,
+   "ACER-MOP/5.2": 0,
+   "ACER-TRUM/2.1.2.1": 1,
+   "IR-2014/6": 0,
+   "ACER-TRUM-7/2": 0,
+   "ACER-OL-ALGO/0": 0,
+   "ACER-TRUM-7/3.2.1": 1,
+   "ACER-GUIDANCE/2.4": 0,
+   "ACER-OL-ALGO/2": 1,
+   "ACER-GUIDANCE/9.2.1": 0
+  },
+  "r020": {
+   "ACER-QA/3.4.6": 0,
+   "ACER-QA/3.3.30": 0,
+   "ACER-EXPOSURE/1.2": 0,
+   "ACER-TRUM/1.1": 0,
+   "ACER-QA/3.4.5": 1,
+   "ACER-MOP/6.3.1": 0,
+   "ACER-MOP/Annex IV.IV": 1,
+   "ACER-MOP/6.2.4": 2,
+   "IR-2026/12": 2,
+   "ACER-MOP/Annex VI.IV": 0,
+   "ACER-QA/3.4.3": 1,
+   "IR-2014/9": 1,
+   "ACER-QA/3.4.7": 1
+  },
+  "r003": {
+   "ACER-TRUM/6.3, field (36)": 0,
+   "ACER-MOP/5.2": 0,
+   "REMIT/8": 1,
+   "IR-2014/6": 0,
+   "ACER-EXPOSURE/3": 0,
+   "ACER-TRUM/2.1.2.2": 0,
+   "IR-2026/ANNEX, Table 5": 0,
+   "ACER-TRUM/1.1": 0,
+   "ACER-TRUM-7/4.4, field (30)": 2,
+   "ACER-TRUM-7/3.2.1": 0,
+   "DR-2026/28": 0,
+   "ACER-GUIDANCE/7.2": 0,
+   "ACER-WHAT-TO-REPORT-2026/1.1": 0,
+   "ACER-TRUM/6.4, field (37)": 2,
+   "ACER-TRUM-7/3.3.1": 0,
+   "ACER-TRUM-7/4.4, field (33)": 0,
+   "REMIT/7d": 0,
+   "ACER-TRUM/2.1.2.4": 0
+  },
+  "r007": {
+   "ACER-MOP/Annex VII": 2,
+   "ACER-QA/3.7.10": 1,
+   "ACER-GUIDANCE/4.2.2": 1,
+   "ACER-UMM-GUIDANCE/3.2′": 0,
+   "ACER-GUIDANCE/6.2.4": 0,
+   "ACER-QA/3.7.17": 0,
+   "ACER-UMM-GUIDANCE/1.1": 0,
+   "ACER-MOP/Annex VII, field (1)": 1,
+   "ACER-QA/3.7.18": 1,
+   "ACER-GUIDANCE/9.3.1": 0,
+   "IR-2014/8": 0
+  },
+  "r011": {
+   "ACER-EXPOSURE/1.1": 0,
+   "ACER-GUIDANCE/2.2.1": 0,
+   "ACER-EXPOSURE/2.2": 2,
+   "ACER-OL-IR-2026/19": 1,
+   "IR-2026/6": 2,
+   "ACER-EXPOSURE/2.1": 1,
+   "ACER-QA/3.3.37": 0,
+   "ACER-OL-IR-2026/18": 2,
+   "ACER-OL-IR-2026/17": 1,
+   "ACER-EXPOSURE/2.3": 1
+  },
+  "r014": {
+   "ACER-MOP/5.2": 0,
+   "IR-2026/ANNEX, Table 2": 1,
+   "ACER-QA/3.7.14": 0,
+   "ACER-EXPOSURE/10": 0,
+   "ACER-TRUM/2.2.2": 2,
+   "ACER-TRUM-7/3.2.1": 0,
+   "REMIT-II/Recital 8": 0,
+   "ACER-TRUM/2": 0,
+   "ACER-TRUM/6.3, field (25)": 1,
+   "ACER-TRUM/7": 1,
+   "ACER-TRUM-7/4.3, field (23)": 0,
+   "ACER-TRUM-7/3.1.6": 1,
+   "ACER-TRUM/7.2, field (17)": 1
+  },
+  "r018": {
+   "ACER-OL-IR-2026/23": 1,
+   "ACER-OL-IR-2026/19": 0,
+   "ACER-TRUM-7/2": 1,
+   "ACER-QA/3.3.2": 0,
+   "ACER-TRUM/1.1": 1,
+   "DR-2026/33": 0,
+   "ACER-MOP/Annex VII, field (1)": 0,
+   "ACER-TRUM-7/1.1": 1,
+   "ACER-TRUM/2": 0,
+   "ACER-TRUM-7/3.1.10": 0,
+   "DR-2026/37": 0,
+   "ACER-TRUM/1.2": 1,
+   "ACER-TRUM-7/3.1.9": 0,
+   "ACER-EXPOSURE/2.3": 0
   }
  }
 }

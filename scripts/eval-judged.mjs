@@ -1,7 +1,7 @@
 // Judged evaluation: BM25, semantic and hybrid search against eval/qrels.json
 // (graded relevance 0/1/2 for 115 questions; see the "method" field in that file).
 //
-//   node scripts/eval-judged.mjs --vectors .vectors/vectors.json [--detail] [--type everyday|technical|temporal] [--split dev|test]
+//   node scripts/eval-judged.mjs --vectors .vectors/vectors.json [--detail] [--type everyday|technical|temporal|reporting|!reporting] [--split dev|test]
 //
 // Metrics (unjudged results count as not relevant; the share of unjudged results is printed):
 //   nDCG@5      graded, gain 2^g - 1 (answers = 3, relevant = 1), ideal from all judged units
@@ -30,7 +30,28 @@ const { qrels } = JSON.parse(readFileSync(new URL('../eval/qrels.json', import.m
 // --dw "ACER-TRUM=0.7,ACER-MOP=0.7": document weights to try (see createEngine).
 const dwArg = arg('--dw');
 const docWeight = Object.fromEntries((dwArg ? dwArg.split(',') : []).map((x) => x.split('=')).map(([k, v]) => [k, +v]));
-const e = createEngine(data, { docWeight });
+// --uw "section=0.7,frame=0.4": weights for the reporting manuals' general sections
+// (section) and their introduction / legal framework sections (frame); fields and annexes 1.
+const uwArg = arg('--uw');
+const UW = Object.fromEntries((uwArg ? uwArg.split(',') : []).map((x) => x.split('=')).map(([k, v]) => [k, +v]));
+const MANUAL = /^ACER-(TRUM|TRUM-7|MOP|EXPOSURE)$/;
+const FRAME = /^(introduction|legal framework|scope and purpose|target audience|acer contacts|market monitoring|front matter)/i;
+// old: TRUM v7.0 chapters 1-3 (the 1348/2014 reporting obligations); frame: introduction /
+// legal framework / contacts sections of the other manuals. Fields, annexes and the
+// remaining sections keep weight 1.
+const unitWeight = uwArg
+  ? (u) => {
+      if (!MANUAL.test(u.d)) return null;
+      const n = u.n.replace(/~\d+$/, '');
+      if (/, field \(|^Annex /.test(n)) return 1;
+      if (u.d === 'ACER-TRUM-7' && /^[0-3](\.|$)/.test(n)) return UW.old ?? 1;
+      if (FRAME.test(u.b || '')) return UW.frame ?? 1;
+      return UW.section ?? 1;
+    }
+  : null;
+// --intent: questions about reporting mechanics keep the manuals at full weight.
+const INTENT = /\b(?:fields?|timestamps?|uti|lei|eic|ace?r code|umms?|urgent market messages?|message id|outage messages?|tables?|xml|schemas?|formats?|codes?|lifecycle|cancel\w*|exposure|positions?|trum|mop|nominations?|delivery points?|index|price fields?|channels?|rejects?|validation)\b/i;
+const e = createEngine(data, { docWeight, unitWeight, fullWeightWhen: process.argv.includes('--intent') ? INTENT : null });
 const vpath = arg('--vectors');
 const c = vpath ? JSON.parse(readFileSync(vpath, 'utf8')) : null;
 const store = c ? new Map(Object.entries(c.units).map(([id, v]) => [id, dequantize(v)])) : null;
@@ -104,7 +125,7 @@ const dcg = (gains) => gains.reduce((s, g, i) => s + (2 ** g - 1) / Math.log2(i 
 const tot = {};
 const perQ = [];
 for (const [id, q, , type] of CANDIDATES) {
-  if (onlyType && type !== onlyType) continue;
+  if (onlyType && (onlyType.startsWith('!') ? type === onlyType.slice(1) : type !== onlyType)) continue;
   if (split && SPLIT.get(id) !== split) continue;
   const rel = qrels[id] || {};
   const answers = Object.keys(rel).filter((u) => rel[u] === 2);

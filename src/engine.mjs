@@ -38,7 +38,8 @@ const DOC_ALIASES = [
 
 // docWeight: optional { docId: weight } overriding the documents' own `weight` (default 1).
 // A weight below 1 lowers a document's results in ranking (both BM25 and semantic).
-export function createEngine(data, { docWeight = {} } = {}) {
+// fullWeightWhen: optional regex; when the query matches it, unit weights are ignored.
+export function createEngine(data, { docWeight = {}, unitWeight: unitWeightFn = null, fullWeightWhen = null } = {}) {
   const { docs, units } = data;
   const docById = new Map(docs.map((d) => [d.id, d]));
   const idOf = (u) => `${u.d}/${u.n}`;
@@ -62,7 +63,8 @@ export function createEngine(data, { docWeight = {} } = {}) {
     }
   });
 
-  const unitWeight = units.map((u) => docWeight[u.d] ?? docs.find((d) => d.id === u.d)?.weight ?? 1);
+  // Per-unit ranking weight: the unit's own `w` (set at build time), else the document's.
+  const unitWeight = units.map((u) => unitWeightFn?.(u) ?? u.w ?? docWeight[u.d] ?? docs.find((d) => d.id === u.d)?.weight ?? 1);
   const isNav = units.map((u) => u.d === 'ACER-QA' && !/^\d+\.\d+\.\d+/.test(u.n));
 
   // ---- BM25 index (built at start-up; the corpus is small) ----
@@ -140,6 +142,7 @@ export function createEngine(data, { docWeight = {} } = {}) {
     // Q&A chapter introductions ("This section contains answers on …") never answer a
     // question; they are left out of ranked results but still resolve as citations.
     const ranks = (i) => allowed(i) && !isNav[i];
+    const wt = fullWeightWhen?.test(q) ? () => 1 : (i) => unitWeight[i];
 
     // A query that is itself a citation returns that provision first.
     const direct = resolveProvision(q);
@@ -160,7 +163,7 @@ export function createEngine(data, { docWeight = {} } = {}) {
       }
     }
     let ranked = [...scores]
-      .map(([i, s]) => [i, unitWeight[i] * s * (0.5 + (0.5 * (hits.get(i) || 0)) / Math.max(1, terms.length))])
+      .map(([i, s]) => [i, wt(i) * s * (0.5 + (0.5 * (hits.get(i) || 0)) / Math.max(1, terms.length))])
       .sort((a, b) => b[1] - a[1])
       .map(([i]) => i);
 
@@ -168,7 +171,7 @@ export function createEngine(data, { docWeight = {} } = {}) {
     if (sem.length) {
       const fused = new Map();
       ranked.forEach((i, r) => fused.set(i, (fused.get(i) || 0) + fusion.bm25 / (fusion.k + r + 1)));
-      sem.forEach((i, r) => fused.set(i, (fused.get(i) || 0) + (unitWeight[i] * fusion.semantic) / (fusion.k + r + 1)));
+      sem.forEach((i, r) => fused.set(i, (fused.get(i) || 0) + (wt(i) * fusion.semantic) / (fusion.k + r + 1)));
       ranked = [...fused].sort((a, b) => b[1] - a[1]).map(([i]) => i);
     }
     // One result per section: split parts collapse into the best-ranked part.
