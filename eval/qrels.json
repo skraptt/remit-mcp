@@ -5,11 +5,12 @@
   "1": "relevant context or partial answer",
   "2": "answers the question"
  },
- "method": "Pool: union of top-5 BM25, semantic and hybrid results plus the source unit, 115 questions. Each pair graded by two independent LLM judges (agreement 92.2%, weighted kappa 0.93). A human reviewer (lawyer) graded all 88 disagreements plus a 60-pair blind calibration sample, then adjudicated 22 pairs on the answers-it boundary with full text.",
+ "method": "Pool: union of top-5 BM25, semantic and hybrid results plus the source unit, 115 questions. Each pair graded by two independent LLM judges (agreement 92.2%, weighted kappa 0.93). A human reviewer (lawyer) graded all 88 disagreements plus a 60-pair blind calibration sample, then adjudicated 22 pairs on the answers-it boundary with full text. Second pass (search tuning, Nov 2026): 27 pairs newly in the top 5 graded by two fresh LLM judges; 26 agreed, 1 one-step disagreements resolved to the lower grade.",
  "sources": {
   "judges": 985,
   "human": 126,
-  "final": 22
+  "final": 22,
+  "judges2": 27
  },
  "qrels": {
   "c001": {
@@ -151,7 +152,10 @@
    "ACER-QA/3.3.42": 0,
    "REMIT-II/1": 0,
    "ACER-QA/3.7.24": 0,
-   "ACER-GUIDANCE/3.2": 0
+   "ACER-GUIDANCE/3.2": 0,
+   "ACER-QA/2.2.3": 0,
+   "REMIT/13a": 0,
+   "REMIT/13": 0
   },
   "c013": {
    "ACER-QA/3.3.23": 2,
@@ -170,7 +174,8 @@
    "ACER-GUIDANCE/2.3": 1,
    "ACER-GUIDANCE/2.3.3": 2,
    "ACER-GUIDANCE/2.3.2": 1,
-   "ACER-GUIDANCE/2.3.1": 1
+   "ACER-GUIDANCE/2.3.1": 1,
+   "REMIT-II/Recital 19": 1
   },
   "c015": {
    "ACER-GUIDANCE/2.3.6": 0,
@@ -254,7 +259,9 @@
    "ACER-QA/3.5": 0,
    "ACER-QA/3.5.3": 1,
    "ACER-QA/3.5.1": 0,
-   "IR-2026/Recital 11": 0
+   "IR-2026/Recital 11": 0,
+   "ACER-QA/3.3.19": 0,
+   "IR-2026/Recital 13": 0
   },
   "c023": {
    "IR-2014/2": 1,
@@ -265,7 +272,8 @@
    "ACER-QA/3.5": 0,
    "IR-2026/Recital 11": 0,
    "ACER-QA/3.6": 0,
-   "REMIT/5a": 0
+   "REMIT/5a": 0,
+   "REMIT-II/Recital 6": 0
   },
   "c024": {
    "ACER-QA/3.7.15": 2,
@@ -436,7 +444,14 @@
    "ACER-QA/2.1.3": 0,
    "ACER-GUIDANCE/6.3.1": 0,
    "ACER-GUIDANCE/5.2.1": 0,
-   "REMIT-II/Recital 8": 0
+   "REMIT-II/Recital 8": 0,
+   "ACER-GUIDANCE/8.2": 1,
+   "ACER-QA/2.1.2": 0,
+   "ACER-QA/2.4.16": 0,
+   "ACER-QA/2.4.24": 0,
+   "ACER-QA/2.4.58": 0,
+   "IR-2014/ANNEX, Table 1": 0,
+   "REMIT/9": 1
   },
   "c038": {
    "ACER-QA/2.4.47": 2,
@@ -568,7 +583,8 @@
    "IR-2014/6": 1,
    "ACER-OL-IR-2026/8": 0,
    "ACER-GUIDANCE/9.4.3.1": 0,
-   "ACER-QA/3.2.26": 2
+   "ACER-QA/3.2.26": 2,
+   "ACER-GN-WASH/5": 0
   },
   "c048": {
    "IR-2026/14": 2,
@@ -614,7 +630,8 @@
    "IR-2026/ANNEX, Table 2": 0,
    "ACER-QA/3.2.5": 0,
    "IR-2014/5": 0,
-   "ACER-QA/2.4.27": 2
+   "ACER-QA/2.4.27": 2,
+   "ACER-QA/3.2.34": 1
   },
   "c052": {
    "IR-2026/Recital 1": 0,
@@ -833,7 +850,10 @@
    "ACER-QA/3.5.1": 1,
    "ACER-QA/3.6": 0,
    "ACER-QA/3.5.2": 2,
-   "IR-2026/Recital 11": 0
+   "IR-2026/Recital 11": 0,
+   "ACER-OL-IR-2026/13": 0,
+   "ACER-QA/3.3.44": 1,
+   "IR-2026/Recital 13": 1
   },
   "c071": {
    "ACER-QA/2.4.4": 2,
@@ -981,7 +1001,8 @@
    "ACER-QA/3.7.18": 0,
    "ACER-GUIDANCE/3.3.1": 1,
    "ACER-GUIDANCE/6.2.4": 0,
-   "ACER-GUIDANCE/3.3.4": 1
+   "ACER-GUIDANCE/3.3.4": 1,
+   "ACER-QA/3.7.15": 0
   },
   "c084": {
    "ACER-GUIDANCE/6.2.4": 0,
@@ -1029,7 +1050,8 @@
    "ACER-QA/3.3.47": 1,
    "ACER-QA/3.7.14": 0,
    "ACER-QA/3.7.9": 0,
-   "REMIT-II/Recital 19": 1
+   "REMIT-II/Recital 19": 1,
+   "ACER-MANUAL-2026/3": 0
   },
   "g001": {
    "ACER-QA/2.4.54": 1,
@@ -1199,7 +1221,8 @@
    "ACER-QA/2.1.1": 0,
    "ACER-GUIDANCE/6.2": 1,
    "ACER-GN-LAYERING/0": 0,
-   "REMIT-II/Recital 19": 0
+   "REMIT-II/Recital 19": 0,
+   "ACER-QA/2.4.44": 1
   },
   "g015": {
    "ACER-GUIDANCE/9.3.3": 2,
@@ -1253,7 +1276,12 @@
    "ACER-GN-WASH/5": 2,
    "ACER-QA/3.5.3": 0,
    "ACER-QA/3.7.21": 0,
-   "ACER-GUIDANCE/2.2.2": 0
+   "ACER-GUIDANCE/2.2.2": 0,
+   "ACER-GN-CAPACITY/3.1.2": 0,
+   "ACER-GN-WASH/0": 0,
+   "ACER-GN-WASH/1": 2,
+   "ACER-GN-WASH/3.1": 1,
+   "ACER-GN-WASH/6": 1
   },
   "g019": {
    "ACER-GN-CAPACITY/5": 2,

@@ -10,7 +10,7 @@ import { ICON_PNG_BASE64 } from './icon.mjs';
 
 const ICON = Uint8Array.from(atob(ICON_PNG_BASE64), (c) => c.charCodeAt(0));
 
-export const SERVER_INFO = { name: 'remit', title: 'REMIT MCP', version: '1.0.1' };
+export const SERVER_INFO = { name: 'remit', title: 'REMIT MCP', version: '1.0.2' };
 const SUPPORTED_VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05'];
 
 const INSTRUCTIONS =
