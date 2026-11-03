@@ -25,18 +25,20 @@ const MAX_UNIT = 4000; // characters; longer guidance sections are split at para
 const manifest = JSON.parse(readFileSync(join(src, 'manifest.json'), 'utf8'));
 const registry = new Map([...EURLEX, ...ACER].map((e) => [e.id, e]));
 
-function pdfLines(id) {
-  const out = join(src, 'lines', `${id}.jsonl`);
+function pdfLines(id, { tables = false } = {}) {
+  // Documents read with table detection get their own cache file.
+  const out = join(src, 'lines', `${id}${tables ? '.t' : ''}.jsonl`);
   if (!existsSync(out)) {
     mkdirSync(join(src, 'lines'), { recursive: true });
-    const text = execFileSync('python3', [new URL('./pdf_lines.py', import.meta.url).pathname, join(src, manifest[id].file)], { maxBuffer: 1 << 28 });
+    const args = [new URL('./pdf_lines.py', import.meta.url).pathname, join(src, manifest[id].file), ...(tables ? ['--tables'] : [])];
+    const text = execFileSync('python3', args, { maxBuffer: 1 << 28 });
     writeFileSync(out, text);
   }
   return readFileSync(out, 'utf8').trim().split('\n').map((l) => JSON.parse(l));
 }
 
 // Splits a long section at "(n)" paragraph starts into parts of at most MAX_UNIT characters.
-function splitSection(text) {
+function splitSection(text, { lines = false } = {}) {
   if (text.length <= MAX_UNIT) return [text];
   const paras = text.split(/\n(?=\(\d{1,4}\)\s)/);
   const parts = [];
@@ -48,7 +50,21 @@ function splitSection(text) {
     } else cur = cur ? `${cur}\n${p}` : p;
   }
   if (cur) parts.push(cur);
-  return parts;
+  // Parts still too long (tables, unnumbered text) are split at line breaks; only for the
+  // documents read with table detection, so the other documents keep their units.
+  return parts.flatMap((p) => {
+    if (!lines || p.length <= MAX_UNIT * 1.5) return [p];
+    const out = [];
+    let c = '';
+    for (const line of p.split('\n')) {
+      if (c && c.length + line.length > MAX_UNIT) {
+        out.push(c);
+        c = line;
+      } else c = c ? `${c}\n${line}` : line;
+    }
+    if (c) out.push(c);
+    return out;
+  });
 }
 
 const paraRange = (t) => {
@@ -71,8 +87,9 @@ for (const [id, m] of Object.entries(manifest)) {
     continue;
   }
 
-  const defaultIR = /2026/.test(id) ? 'IR-2026' : 'IR-2014';
-  const sections = parsePdfLines(pdfLines(id), { doc: id });
+  const defaultIR = reg.defaultIR || (/2026/.test(id) ? 'IR-2026' : 'IR-2014');
+  const { tables, ...pdfOpts } = reg.pdf || {};
+  const sections = parsePdfLines(pdfLines(id, { tables }), { doc: id, ...pdfOpts });
   const seen = new Map();
   for (const s of sections) {
     // Front matter of the long documents is a cover page and a list of related documents.
@@ -85,7 +102,7 @@ for (const [id, m] of Object.entries(manifest)) {
     let num = s.num;
     if (seen.has(num)) num = `${num}${'′'.repeat(seen.get(num))}`; // duplicate numbering (summary tables)
     seen.set(s.num, (seen.get(s.num) || 0) + 1);
-    const parts = splitSection(s.text);
+    const parts = splitSection(s.text, { lines: !!tables });
     parts.forEach((t, i) => {
       const cites = findCitations(`${s.title}\n${t}\n${s.notes.join('\n')}`, { defaultIR });
       units.push({

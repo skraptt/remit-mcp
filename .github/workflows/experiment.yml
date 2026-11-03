@@ -32,8 +32,31 @@ jobs:
         run: |
           git fetch --depth=1 origin sources && git worktree add .sources FETCH_HEAD
           git fetch --depth=1 origin vectors && git worktree add .vectors FETCH_HEAD
+      # Sources named in the commit message as [fetch:ID,ID] are fetched into the stored
+      # sources for this run only (nothing is pushed to the sources branch), and copied to
+      # the results so parsing can be developed locally.
+      - name: Fetch new sources
+        env:
+          MSG: ${{ github.event.head_commit.message }}
+        run: |
+          ids=$(printf '%s' "$MSG" | grep -o '\[fetch:[^]]*\]' | head -1 | sed 's/\[fetch:\(.*\)\]/\1/' || true)
+          mkdir -p .exp/src
+          if [ -n "$ids" ]; then
+            node scripts/fetch.mjs --out .sources --only "$ids" || true
+            cp .sources/manifest.json .sources/fetch-log.txt .exp/src/
+            mkdir -p .exp/src/raw
+            for id in $(echo "$ids" | tr ',' ' '); do cp .sources/raw/"$id".* .exp/src/raw/ 2>/dev/null || true; done
+          fi
       - name: Build data
         run: node scripts/build-data.mjs --src .sources
+      # With [embed] in the commit message: vectors for new or changed units and the
+      # evaluation questions, written to the results only (no upload to Vectorize).
+      - name: Embed (no upload)
+        if: contains(github.event.head_commit.message, '[embed]')
+        run: node scripts/embed.mjs --cache .vectors --queries && cp .vectors/vectors.json .exp/vectors.json
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       # Workers AI experiments run only when the pushed commit message contains [ai].
       - name: Run experiments
         if: contains(github.event.head_commit.message, '[ai]')
@@ -41,15 +64,6 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      # Sources named in the commit message as [fetch:ID,ID] are fetched fresh into .exp/src
-      # (to develop parsing for new documents locally).
-      - name: Fetch new sources
-        env:
-          MSG: ${{ github.event.head_commit.message }}
-        run: |
-          ids=$(printf '%s' "$MSG" | grep -o '\[fetch:[^]]*\]' | head -1 | sed 's/\[fetch:\(.*\)\]/\1/' || true)
-          mkdir -p .exp
-          if [ -n "$ids" ]; then node scripts/fetch.mjs --out .exp/src --only "$ids" || true; fi
       - name: Save results
         run: |
           cp data/remit.json .exp/remit.json

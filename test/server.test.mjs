@@ -50,7 +50,7 @@ test('HTTP basics', async () => {
   const get = await handleRequest(engine, new Request('https://example.dev/mcp'));
   assert.equal(get.status, 405);
   const info = await handleRequest(engine, new Request('https://example.dev/')).then((r) => r.json());
-  assert.equal(info.documents, 16);
+  assert.equal(info.documents, 20);
   const icon = await handleRequest(engine, new Request('https://example.dev/icon.png'));
   assert.equal(icon.headers.get('content-type'), 'image/png');
   const png = new Uint8Array(await icon.arrayBuffer());

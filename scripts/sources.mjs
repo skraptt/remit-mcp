@@ -90,7 +90,9 @@ export const ACER = [
   // highest version number in the file name, and `url` is the fallback.
   {
     id: 'ACER-TRUM',
-    title: 'ACER Transaction Reporting User Manual (TRUM)',
+    defaultIR: 'IR-2026', // "the REMIT Implementing Regulation" in this document
+    pdf: { tables: true, annexes: true, numberedPlain: true, fieldHeadings: true },
+    title: 'ACER Transaction Reporting User Manual (TRUM), latest version – for reporting under Implementing Regulation (EU) 2026/256 from 29 October 2027',
     short: 'ACER TRUM',
     layer: 'guidance',
     latest: true,
@@ -99,21 +101,27 @@ export const ACER = [
   },
   {
     id: 'ACER-TRUM-7',
-    title: 'ACER Transaction Reporting User Manual (TRUM) v7.0 – reporting tables of Implementing Regulation 1348/2014',
+    defaultIR: 'IR-2014', // "the REMIT Implementing Regulation" in this document
+    pdf: { tables: true, annexes: true, numberedPlain: true, fieldHeadings: true },
+    title: 'ACER Transaction Reporting User Manual (TRUM) v7.0 – applies until 29 October 2027 (reporting tables of Implementing Regulation 1348/2014)',
     short: 'ACER TRUM 7.0',
     layer: 'guidance',
     url: 'https://www.acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/Transaction%20Reporting%20User%20Manual%20(TRUM)/ACER-REMIT-TRUM-2024-v7.0.pdf',
   },
   {
     id: 'ACER-EXPOSURE',
-    title: 'ACER Guidance on reporting exposure under REMIT',
+    defaultIR: 'IR-2026', // "the REMIT Implementing Regulation" in this document
+    pdf: { tables: true, annexes: true, numberedPlain: true, fieldHeadings: true },
+    title: 'ACER Guidance on reporting exposure under REMIT (Article 6 of Implementing Regulation (EU) 2026/256)',
     short: 'ACER Exposure Guidance',
     layer: 'guidance',
     match: /Guidance-on-reporting-exposure/i,
   },
   {
     id: 'ACER-MOP',
-    title: 'ACER Manual of Procedures (MoP) on data reporting',
+    defaultIR: 'IR-2014', // "the REMIT Implementing Regulation" in this document
+    pdf: { tables: true, annexes: true, numberedPlain: true, fieldHeadings: true },
+    title: 'ACER Manual of Procedures (MoP) on transaction data, fundamental data and inside information reporting (Annex VII: data fields for inside information)',
     short: 'ACER MoP',
     layer: 'guidance',
     latest: true,

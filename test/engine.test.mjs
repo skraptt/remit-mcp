@@ -9,8 +9,8 @@ const data = JSON.parse(readFileSync(new URL('../data/remit.json', import.meta.u
 const e = createEngine(data);
 const ids = new Set(data.units.map((u) => `${u.d}/${u.n}`));
 
-test('all 16 source documents are present and parsed', () => {
-  assert.equal(data.docs.length, 16);
+test('all 20 source documents are present and parsed', () => {
+  assert.equal(data.docs.length, 20);
   const count = (d, k) => data.units.filter((u) => u.d === d && (!k || u.k === k)).length;
   assert.ok(count('REMIT', 'article') >= 40, 'REMIT articles incl. 7a–7e');
   assert.equal(count('IR-2026', 'article'), 17);
@@ -18,6 +18,26 @@ test('all 16 source documents are present and parsed', () => {
   assert.equal(count('IR-2026', 'annex'), 5);
   assert.ok(count('ACER-QA') > 150);
   assert.ok(count('ACER-GUIDANCE') > 100);
+});
+
+test('reporting manuals: data fields, annexes and tables', () => {
+  const unit = (d, n) => data.units.find((u) => u.d === d && u.n.replace(/~\d+$/, '') === n);
+  // MoP Annex VII: one unit per UMM data field, with the field table as "a | b" rows.
+  const f = unit('ACER-MOP', 'Annex VII, field (4/b)');
+  assert.match(f.b, /^Data Field \(4\/b\) Type of Event/);
+  assert.match(f.t, /4\/b \| Type of Event \| Identifies the main characteristic/);
+  assert.ok(unit('ACER-MOP', 'Annex III.I'), 'roman sub-annexes');
+  // TRUM v7.0: plain-text third-level headings and data fields per section.
+  assert.ok(unit('ACER-TRUM-7', '3.1.2'));
+  assert.match(unit('ACER-TRUM-7', '4.1, field (3)').b, /ID of the trader .* organised market place$/);
+  assert.ok(data.units.filter((u) => u.d === 'ACER-TRUM' && /, field \(/.test(u.n)).length > 150, 'TRUM v8 data fields');
+  assert.ok(unit('ACER-EXPOSURE', '2.3'));
+  // Citations resolve to them.
+  assert.equal(e.getProvision({ provision: 'MoP Annex VII field 4/b', related: 0 }).id, 'ACER-MOP/Annex VII, field (4/b)');
+  assert.equal(e.getProvision({ provision: 'TRUM 7.0 4.1 field (3)', related: 0 }).id, 'ACER-TRUM-7/4.1, field (3)');
+  assert.equal(e.getProvision({ provision: 'MoP Annex VII field 4/b', related: 0 }).citation, 'ACER MoP, Annex VII, field (4/b)');
+  // The manuals are linked to the provisions they cite.
+  assert.ok(data.units.some((u) => u.d === 'ACER-EXPOSURE' && (u.l || []).includes('IR-2026/6')));
 });
 
 test('articles keep their number, title and body', () => {

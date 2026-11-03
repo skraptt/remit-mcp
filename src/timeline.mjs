@@ -33,15 +33,17 @@ export const TIMELINE = [
   },
   {
     date: '2026-10-29',
-    event: 'Deadline for ACER guidance and electronic formats on Article 6 (exposure reporting) and on Articles 3, 4(2), 7(2), 8(5) and 10(6) of Implementing Regulation (EU) 2026/256.',
+    event: 'Deadline for ACER guidance and electronic formats on Article 6 (exposure reporting) and on Articles 3, 4(2), 7(2), 8(5) and 10(6) of Implementing Regulation (EU) 2026/256. ACER published TRUM v8.0 and its Guidance on reporting exposure (v1.0) on this date.',
     source: 'IR-2026/17',
     applies: [],
+    alsoSee: ['ACER-TRUM/1.2', 'ACER-EXPOSURE/2.3'],
   },
   {
     date: '2027-01-01',
-    event: 'Exposure reporting (Article 6 of Implementing Regulation (EU) 2026/256) applies.',
+    event: 'Exposure reporting (Article 6 of Implementing Regulation (EU) 2026/256) applies: market participants assess the 600 GWh threshold for 2027 on the basis of transactions concluded by 31 December 2026 with delivery in 2027. The first report is due in October 2027.',
     source: 'IR-2026/17',
     applies: ['IR-2026/6'],
+    alsoSee: ['ACER-EXPOSURE/2.3', 'ACER-OL-IR-2026/19'],
   },
   {
     date: '2027-04-29',
@@ -51,11 +53,25 @@ export const TIMELINE = [
   },
   {
     date: '2027-10-29',
+    event: 'TRUM v8.0 replaces TRUM v7.0: reporting under the new tables of Implementing Regulation (EU) 2026/256 follows TRUM v8.0; until this date TRUM v7.0 applies.',
+    source: 'ACER-TRUM/1.2',
+    applies: [],
+    alsoSee: ['ACER-TRUM-7/1.1'],
+  },
+  {
+    date: '2027-10-29',
     event:
       'Articles 3, 4(2), 7(2), 8(5), 10(6) and the Annex (reporting tables) of Implementing Regulation (EU) 2026/256 apply. Article 3, Article 11(1) and the Annex of Implementing Regulation (EU) No 1348/2014 cease to apply. Articles 3 to 8 and 10 to 39 of Delegated Regulation (EU) 2026/255, including Annexes I and II, apply. Deadline for ACER guidance on Article 4(8).',
     source: 'IR-2026/17',
     applies: ['IR-2026/3', 'IR-2026/4', 'IR-2026/7', 'IR-2026/8', 'IR-2026/10', 'DR-2026/3', 'DR-2026/10', 'DR-2026/39'],
     alsoSee: ['IR-2026/16', 'DR-2026/40'],
+  },
+  {
+    date: '2027-10-31',
+    event: 'First exposure report due (reference quarter Q3 2027; positions with delivery 1 October 2027 – 31 March 2029), then quarterly by the last day of the month after each quarter.',
+    source: 'ACER-EXPOSURE/2.3',
+    applies: ['IR-2026/6'],
+    alsoSee: ['ACER-OL-IR-2026/19'],
   },
   {
     date: '2028-04-29',

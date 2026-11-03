@@ -16,7 +16,22 @@ function mode(values) {
   return [...c].sort((a, b) => b[1] - a[1])[0]?.[0];
 }
 
-export function parsePdfLines(lines, { doc, skipPages = 0 } = {}) {
+// Options for the reporting manuals (MoP, TRUM), off by default so the other documents
+// parse exactly as before:
+//   annexes         "ANNEX VII …" starts an annex; numbered headings inside it are numbered
+//                   within the annex ("Annex VII", "Annex III.I", "Annex I, 2") and
+//                   unnumbered headings stay in the text
+//   numberedPlain   numbered headings set in regular body text ("3.1.2 Transportation
+//                   contracts") also start sections (at least two levels, short, no full stop)
+//   fieldHeadings   "Data Field (1) …" / "Data Field No (4/b) …" starts a sub-section per
+//                   field, numbered "<section>, field (1)"
+// Table rows from pdf_lines.py --tables ("tb") are never headings and are kept one per line.
+const ANNEX = /^ANNEX\s+([IVXL]+)(?:\b|(?=[A-Z][a-z]))[\s:.\-–]*(.*)$/; // "ANNEX VIIData fields" (no space in the PDF)
+const ANNEX_SUB = /^([IVXL]+\.[IVXL]+)\.?\s+(\S.*)$/;
+const PLAIN_NUMBERED = /^(\d{1,2}(?:\.\d{1,3}){1,4})\.?\s+([A-Z][^.]{2,110})$/;
+const FIELD = /^Data\s+Field\s+(?:No\.?\s*)?\((\d{1,3}[a-z]?(?:\/[a-z])?)\)\s*(.*)$/i;
+
+export function parsePdfLines(lines, { doc, skipPages = 0, annexes = false, numberedPlain = false, fieldHeadings = false } = {}) {
   const pages = new Set(lines.map((l) => l.p)).size;
   // Running headers/footers: same normalised text on many pages.
   const repeat = new Map();
@@ -68,10 +83,36 @@ export function parsePdfLines(lines, { doc, skipPages = 0 } = {}) {
     cur = { doc, num: number === '0' ? '0' : counters.filter((x) => x != null).join('.'), title, level, page: null, lines: [], notes: [] };
     sections.push(cur);
   };
+  // A section with an explicit number (annexes, data fields).
+  const startNamed = (num, title, level, page) => {
+    cur = { doc, num, title, level, page, lines: [], notes: [] };
+    sections.push(cur);
+  };
+  let annex = null; // current annex ("VII") when `annexes` is on
+  const skipLine = new Set(); // continuation lines already joined into a field heading
+  const sectionBase = () => (cur?.num || '').replace(/, field \([^)]*\)$/, '');
 
   let pending = null; // multi-line heading being assembled
   const flush = () => {
     if (!pending) return;
+    if (annexes) {
+      const a = pending.text.match(ANNEX);
+      if (a) {
+        annex = a[1];
+        startNamed(`Annex ${annex}`, a[2].trim() || `Annex ${annex}`, 1, pending.p);
+        pending = null;
+        return;
+      }
+      if (annex) {
+        const sub = pending.text.match(ANNEX_SUB);
+        const num = pending.text.match(NUMBERED);
+        if (sub) startNamed(`Annex ${sub[1]}`, sub[2].trim(), 2, pending.p);
+        else if (num) startNamed(`Annex ${annex}, ${num[1]}`, pending.text.slice(num[0].length).trim(), 2, pending.p);
+        else cur.lines.push({ p: pending.p, y: pending.y, s: pending.s, t: pending.text });
+        pending = null;
+        return;
+      }
+    }
     const m = pending.text.match(NUMBERED);
     const number = m ? m[1] : null;
     const title = (m ? pending.text.slice(m[0].length) : pending.text).trim();
@@ -91,6 +132,42 @@ export function parsePdfLines(lines, { doc, skipPages = 0 } = {}) {
     }
     const t = l.t.trim();
     if (!t) continue;
+    if (l.tb) {
+      flush();
+      if (!cur) startSection('Front matter', 1, null), (cur.page = l.p);
+      cur.lines.push({ ...l, t });
+      continue;
+    }
+    // Annex headings and their "III.I"-style sub-headings are bold at body size.
+    if (annexes && l.b && !l.i && t.length < 200 && !TOC_LEADER.test(t) && (ANNEX.test(t) || (annex && ANNEX_SUB.test(t)))) {
+      flush();
+      pending = { text: t, s: l.s, p: l.p, y: l.y, level: 1 };
+      flush();
+      continue;
+    }
+    // A field heading is followed by the field's definition table; a sentence that merely
+    // starts with "Data Field (3) is …" is not.
+    // A heading may wrap onto a second bold line before the table.
+    if (fieldHeadings && skipLine.has(idx)) continue;
+    const following = () => lines.slice(idx + 1, idx + 6).filter((n) => n.t.trim() && !isChrome(n));
+    const fieldNext = fieldHeadings && FIELD.test(t) ? following() : [];
+    const wraps = !fieldNext[0]?.tb && fieldNext[0]?.b && fieldNext[1]?.tb;
+    if (fieldHeadings && cur && !l.i && FIELD.test(t) && t.length < 200 && (fieldNext[0]?.tb || wraps)) {
+      flush();
+      const f = `${t}${wraps ? ` ${fieldNext[0].t.trim()}` : ''}`.match(FIELD);
+      if (wraps) skipLine.add(lines.indexOf(fieldNext[0]));
+      const base = sectionBase();
+      const parent = sections.findLast((x) => x.num === base);
+      startNamed(`${base}, field (${f[1]})`, `Data Field (${f[1]}) ${f[2].trim()}`.trim(), (parent?.level || 1) + 1, l.p);
+      continue;
+    }
+    if (numberedPlain && !l.b && !l.i && Math.abs(l.s - body) <= 0.5 && PLAIN_NUMBERED.test(t) && !TOC_LEADER.test(t) && !(annex && annexes)) {
+      flush();
+      const m = t.match(PLAIN_NUMBERED);
+      startSection(m[2].trim(), m[1].split('.').length, m[1]);
+      cur.page = l.p;
+      continue;
+    }
     if (footStart.has(l.p) && l.y >= footStart.get(l.p) && l.s < body) {
       if (cur) {
         if (/^\d{1,3}\s+\S/.test(t) || !cur.notes.length) cur.notes.push(t);
@@ -124,7 +201,7 @@ export function parsePdfLines(lines, { doc, skipPages = 0 } = {}) {
     let prev = null;
     for (const l of s.lines) {
       const gap = prev && (l.p !== prev.p ? 0 : l.y - prev.y);
-      const starts = /^\(\d{1,4}\)\s/.test(l.t) || /^[•▪–-]\s/.test(l.t) || /^\(?[a-z]{1,3}\)\s/.test(l.t) || (prev && gap > l.s * 1.9);
+      const starts = l.tb || prev?.tb || /^\(\d{1,4}\)\s/.test(l.t) || /^[•▪–-]\s/.test(l.t) || /^\(?[a-z]{1,3}\)\s/.test(l.t) || (prev && gap > l.s * 1.9);
       if (!prev || starts) paras.push(l.t);
       else paras[paras.length - 1] += (paras[paras.length - 1].endsWith('-') ? '' : ' ') + l.t;
       prev = l;

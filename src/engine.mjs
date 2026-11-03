@@ -26,6 +26,10 @@ const DOC_ALIASES = [
   ['ACER-OL-DR-2026', /open\s+letter.*delegated/i],
   ['ACER-OL-ALGO', /open\s+letter.*algo/i],
   ['ACER-UMM-GUIDANCE', /\bumm\b|web\s*feed/i],
+  ['ACER-TRUM-7', /\b(?:trum|transaction\s+reporting\s+user\s+manual)\s*(?:v(?:ersion)?\s*)?7(?:\.0)?\b/i],
+  ['ACER-TRUM', /\btrum\b|transaction\s+(?:reporting\s+)?user\s+manual/i],
+  ['ACER-MOP', /\bmop\b|manual\s+of\s+procedures/i],
+  ['ACER-EXPOSURE', /exposure\s+(?:reporting\s+)?guidance|guidance\s+on\s+(?:reporting\s+)?exposure/i],
   ['ACER-MANUAL-2026', /\bmanual\b/i],
   ['ACER-WHAT-TO-REPORT-2026', /what\s+to\s+report/i],
   ['ACER-GUIDANCE', /\bacer\s+guidance\b|\bguidance\b/i],
@@ -86,7 +90,7 @@ export function createEngine(data) {
     if (u.k === 'recital') return `${n} ${d.short}`;
     if (u.k === 'annex') return `${d.short}, ${n.replace(/^ANNEX/i, 'Annex')}`;
     if (u.d === 'ACER-QA') return `${d.short}, Q ${n}`;
-    return `${d.short}, ${n === '0' ? 'introduction' : `section ${n}`}${u.pr ? `, ${u.pr}` : ''}`;
+    return `${d.short}, ${n === '0' ? 'introduction' : /^Annex /.test(n) ? n : `section ${n}`}${u.pr ? `, ${u.pr}` : ''}`;
   };
   const urlOf = (u) => {
     const d = docById.get(u.d);
@@ -206,6 +210,29 @@ export function createEngine(data) {
     if ((m = t.match(/\btable\s*(\d)/i)) && doc && !/^ACER/.test(doc)) {
       const i = units.findIndex((u) => u.d === doc && u.k === 'annex' && new RegExp(`Table\\s+${m[1]}\\b`).test(u.n));
       return i >= 0 ? { id: idOf(units[i]), indices: [i] } : { missing: `${doc} Annex Table ${m[1]}` };
+    }
+    // Reporting manuals: "TRUM field 30", "TRUM 4.4 field (30)", "MoP Annex VII field 4/b",
+    // "MoP Annex III.I".
+    if (doc && /^ACER/.test(doc)) {
+      const annex = t.match(/\bannex\s+([ivxl]+(?:\.[ivxl]+)?)\b/i)?.[1]?.toUpperCase();
+      const field = t.match(/\bfield\s*(?:no\.?\s*)?\(?\s*(\d{1,3}[a-z]?(?:\/[a-z])?)\s*\)?/i)?.[1];
+      // The section is the number just before "field" ("4.1 field (3)"), else any section
+      // number that is not a document version ("TRUM 7.0").
+      const sec =
+        t.match(/(\d{1,2}(?:\.\d{1,3}){1,4})\s*,?\s*(?:data\s+)?field\b/i)?.[1] ??
+        t.replace(/\b(?:trum|v(?:ersion)?)\s*v?\d+(?:\.\d+)?\b/gi, ' ').match(/(?:^|\s|§)(\d{1,2}(?:\.\d{1,3}){1,4})\b/)?.[1];
+      if (field) {
+        const where = annex ? `Annex ${annex}` : sec;
+        const want = (n) => n.replace(/~\d+$/, '').endsWith(`, field (${field})`) && (!where || n.startsWith(`${where}, field`));
+        const i = units.findIndex((u) => u.d === doc && want(u.n));
+        if (i >= 0) return { id: baseId(units[i]), indices: sectionParts.get(baseId(units[i])) || [i] };
+        return { missing: `${doc} ${where ? `${where}, ` : ''}field (${field})` };
+      }
+      if (annex) {
+        const id = `${doc}/Annex ${annex}`;
+        if (sectionParts.has(id)) return { id, indices: sectionParts.get(id) };
+        if (byId.has(id)) return { id, indices: [byId.get(id)] };
+      }
     }
     if ((m = t.match(/(?:^|\s|§)(\d{1,2}(?:\.\d{1,3}){0,4})\b/)) && doc && /^ACER/.test(doc)) {
       const id = `${doc}/${m[1]}`;
