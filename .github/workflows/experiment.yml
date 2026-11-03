@@ -47,7 +47,7 @@ jobs:
         env:
           MSG: ${{ github.event.head_commit.message }}
         run: |
-          ids=$(printf '%s' "$MSG" | grep -o '\[fetch:[^]]*\]' | sed 's/\[fetch:\(.*\)\]/\1/' || true)
+          ids=$(printf '%s' "$MSG" | grep -o '\[fetch:[^]]*\]' | head -1 | sed 's/\[fetch:\(.*\)\]/\1/' || true)
           mkdir -p .exp
           if [ -n "$ids" ]; then node scripts/fetch.mjs --out .exp/src --only "$ids" || true; fi
       - name: Save results
