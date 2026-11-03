@@ -34,11 +34,22 @@ jobs:
           git fetch --depth=1 origin vectors && git worktree add .vectors FETCH_HEAD
       - name: Build data
         run: node scripts/build-data.mjs --src .sources
+      # Workers AI experiments run only when the pushed commit message contains [ai].
       - name: Run experiments
+        if: contains(github.event.head_commit.message, '[ai]')
         run: node scripts/experiment.mjs --vectors .vectors/vectors.json --out .exp
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      # Sources named in the commit message as [fetch:ID,ID] are fetched fresh into .exp/src
+      # (to develop parsing for new documents locally).
+      - name: Fetch new sources
+        env:
+          MSG: ${{ github.event.head_commit.message }}
+        run: |
+          ids=$(printf '%s' "$MSG" | grep -o '\[fetch:[^]]*\]' | sed 's/\[fetch:\(.*\)\]/\1/' || true)
+          mkdir -p .exp
+          if [ -n "$ids" ]; then node scripts/fetch.mjs --out .exp/src --only "$ids" || true; fi
       - name: Save results
         run: |
           cp data/remit.json .exp/remit.json
@@ -49,4 +60,4 @@ jobs:
           git add -A
           git commit -q -m "Experiment results ${GITHUB_SHA::7} $(date -u +%Y-%m-%dT%H:%MZ)"
           git push -q --force "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:experiments
-          cat experiment-log.txt >> "$GITHUB_STEP_SUMMARY"
+          cat experiment-log.txt src/fetch-log.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true

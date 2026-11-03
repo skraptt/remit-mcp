@@ -57,6 +57,8 @@ export const ACER_INDEX_PAGES = [
   'https://www.acer.europa.eu/remit-documents/guidance-remit-application',
   'https://www.acer.europa.eu/remit-documents',
   'https://acer.europa.eu/news/updated-remit-framework-strengthens-trust-eu-energy-markets',
+  'https://www.acer.europa.eu/remit-documents/remit-reporting-guidance',
+  'https://www.acer.europa.eu/transaction-reporting-user-manual-trum',
 ];
 
 export const ACER = [
@@ -84,5 +86,25 @@ export const ACER = [
   { id: 'ACER-MANUAL-2026', keepFrontMatter: true, title: 'ACER REMIT manual for new market participants (2026)', short: 'ACER Manual 2026', layer: 'guidance', url: 'https://www.acer.europa.eu/sites/default/files/REMIT/Guidance%20on%20REMIT%20Application/REMIT-manual-new-market-participants-2026.pdf' },
   { id: 'ACER-UMM-GUIDANCE', title: 'ACER Guidance on the implementation of web feeds for inside information platforms (UMM)', short: 'ACER UMM Guidance', layer: 'guidance', match: /UMM_Guidance\.pdf$/i },
   { id: 'ACER-OL-ALGO', title: 'ACER Open Letter on algorithmic trading', short: 'ACER Open Letter algo', layer: 'guidance', match: /Open-letter-on-algorithmic-trading/i },
+  // Reporting manuals. Several versions can be listed on ACER's pages; `latest` picks the
+  // highest version number in the file name, and `url` is the fallback.
+  {
+    id: 'ACER-TRUM',
+    title: 'ACER Transaction Reporting User Manual (TRUM) – for the reporting tables of Implementing Regulation 1348/2014',
+    short: 'ACER TRUM',
+    layer: 'guidance',
+    latest: true,
+    match: /^ACER-REMIT-TRUM[^/]*v\d+(?:\.\d+)?\.pdf$/i,
+    url: 'https://www.acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/Transaction%20Reporting%20User%20Manual%20(TRUM)/ACER-REMIT-TRUM-2024-v7.0.pdf',
+  },
+  {
+    id: 'ACER-MOP',
+    title: 'ACER Manual of Procedures (MoP) on data reporting, including Annex VII on inside information',
+    short: 'ACER MoP',
+    layer: 'guidance',
+    latest: true,
+    match: /^ACER-REMIT-Manual-data-reporting-V\d+\.pdf$/i,
+    url: 'https://www.acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/Manual%20of%20Procedures%20%28MoP%29%20on%20Data%20Reporting/ACER-REMIT-Manual-data-reporting-V10.pdf',
+  },
   { id: 'ACER-WHAT-TO-REPORT-2026', title: 'ACER – REMIT data: what to report and how (2026)', short: 'ACER What to report 2026', layer: 'guidance', match: /what[^/]*report/i },
 ];
