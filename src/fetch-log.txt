@@ -1,0 +1,5 @@
+· index https://www.acer.europa.eu/transaction-reporting-user-manual-trum → HTTP 403
+✓ ACER-TRUM                    2386648 B  https://acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/REMIT-reporting-phase-1/ACER-REMIT-Transaction-User-Manual-v8-2026.pdf
+✓ ACER-TRUM-7                  2830440 B  https://www.acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/Transaction%20Reporting%20User%20Manual%20(TRUM)/ACER-REMIT-TRUM-2024-v7.0.pdf
+✓ ACER-EXPOSURE                 722414 B  https://www.acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/REMIT-reporting-phase-1/ACER-REMIT-TRUM-Guidance-on-reporting-exposure-under-REMIT.pdf
+✓ ACER-MOP                     1950190 B  https://www.acer.europa.eu/sites/default/files/REMIT/REMIT%20Reporting%20Guidance/Manual%20of%20Procedures%20(MoP)%20on%20Data%20Reporting/ACER_REMIT_MoP-on-data-reporting.pdf
