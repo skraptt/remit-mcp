@@ -195,9 +195,18 @@ export function createEngine(data, { docWeight = {}, unitWeight: unitWeightFn = 
   }
 
   // ---- Resolving references ----
+  // The documents' own short names as used in citations ("ACER GN 1/2019", "ACER Open
+  // Letter IR 2026", "REMIT DR 2026"), longest first. Single-word names ("REMIT") are left
+  // to the aliases so that "REMIT II" still means the amending regulation.
+  const shortNames = docs
+    .filter((d) => d.short && /\s/.test(d.short))
+    .map((d) => [d.id, d.short.toLowerCase()])
+    .sort((a, b) => b[1].length - a[1].length);
   function resolveDoc(s) {
     const t = String(s).trim();
     if (docById.has(t.toUpperCase())) return t.toUpperCase();
+    const lower = t.toLowerCase();
+    for (const [id, short] of shortNames) if (lower.startsWith(short) && !/^[\w.]/.test(lower.slice(short.length))) return id;
     for (const [id, re] of DOC_ALIASES) if (re.test(t)) return id;
     return null;
   }
@@ -223,6 +232,13 @@ export function createEngine(data, { docWeight = {}, unitWeight: unitWeightFn = 
       const i = units.findIndex((u) => u.d === doc && u.k === 'annex' && new RegExp(`Table\\s+${m[1]}\\b`).test(u.n));
       return i >= 0 ? { id: idOf(units[i]), indices: [i] } : { missing: `${doc} Annex Table ${m[1]}` };
     }
+    // "REMIT DR 2026, Annex I".
+    if ((m = t.match(/\bannex\s+([ivxl]+)\b/i)) && doc && !/^ACER/.test(doc)) {
+      const i = units.findIndex((u) => u.d === doc && u.k === 'annex' && new RegExp(`^ANNEX\\s+${m[1]}$`, 'i').test(u.n));
+      if (i >= 0) return { id: idOf(units[i]), indices: [i] };
+    }
+    // Primed numbers ("Q 2.4.3′") are separate units where a document repeats a number.
+    const primed = /′/.test(t);
     // Reporting manuals: "TRUM field 30", "TRUM 4.4 field (30)", "MoP Annex VII field 4/b",
     // "MoP Annex III.I".
     if (doc && /^ACER/.test(doc)) {
@@ -235,19 +251,38 @@ export function createEngine(data, { docWeight = {}, unitWeight: unitWeightFn = 
         t.replace(/\b(?:trum|v(?:ersion)?)\s*v?\d+(?:\.\d+)?\b/gi, ' ').match(/(?:^|\s|§)(\d{1,2}(?:\.\d{1,3}){1,4})\b/)?.[1];
       if (field) {
         const where = annex ? `Annex ${annex}` : sec;
-        const want = (n) => n.replace(/~\d+$/, '').endsWith(`, field (${field})`) && (!where || n.startsWith(`${where}, field`));
+        const want = (n) => {
+          const b = n.replace(/~\d+$/, '');
+          const core = b.replace(/′$/, '');
+          return core.endsWith(`, field (${field})`) && (!where || core.startsWith(`${where}, field`)) && b.endsWith('′') === primed;
+        };
         const i = units.findIndex((u) => u.d === doc && want(u.n));
         if (i >= 0) return { id: baseId(units[i]), indices: sectionParts.get(baseId(units[i])) || [i] };
         return { missing: `${doc} ${where ? `${where}, ` : ''}field (${field})` };
       }
       if (annex) {
-        const id = `${doc}/Annex ${annex}`;
-        if (sectionParts.has(id)) return { id, indices: sectionParts.get(id) };
-        if (byId.has(id)) return { id, indices: [byId.get(id)] };
+        // "MoP Annex I, 3.1": a numbered section inside an annex.
+        const sub = t.match(/\bannex\s+[ivxl]+(?:\.[ivxl]+)?\s*,\s*(?:section\s+)?(\d{1,2}(?:\.\d{1,3}){0,4})\b/i)?.[1];
+        for (const id of sub ? [`${doc}/Annex ${annex}, ${sub}`, `${doc}/Annex ${annex}`] : [`${doc}/Annex ${annex}`]) {
+          if (sectionParts.has(id)) return { id, indices: sectionParts.get(id) };
+          if (byId.has(id)) return { id, indices: [byId.get(id)] };
+        }
       }
+      // "ACER GN 1/2019, introduction": the unnumbered opening part is unit 0.
+      if (/\bintroduction\b/i.test(t) && sectionParts.has(`${doc}/0`)) return { id: `${doc}/0`, indices: sectionParts.get(`${doc}/0`) };
     }
-    if ((m = t.match(/(?:^|\s|§)(\d{1,2}(?:\.\d{1,3}){0,4})\b/)) && doc && /^ACER/.test(doc)) {
-      const id = `${doc}/${m[1]}`;
+    // Section number: an explicit "section 4.4" wins, so the citations this server returns
+    // ("ACER Guidance 6.1, section 4.4, paras. (133)-(134)") resolve to the section and not
+    // to the edition number. Otherwise edition and version numbers ("6.1st edition",
+    // "edition 6.1", "v8.0") are ignored and the first remaining number is the section.
+    const sectionNo =
+      t.match(/\bsection\s+(\d{1,2}(?:\.\d{1,3}){0,4})\b/i)?.[1] ??
+      t
+        .replace(/\b\d+(?:\.\d+)?(?:st|nd|rd|th)\b(?:\s+ed(?:ition|\.)?)?/gi, ' ')
+        .replace(/\b(?:edition|ed\.)\s*\d+(?:\.\d+)?\b/gi, ' ')
+        .match(/(?:^|\s|§)(\d{1,2}(?:\.\d{1,3}){0,4})\b/)?.[1];
+    if (sectionNo && doc && /^ACER/.test(doc)) {
+      const id = `${doc}/${sectionNo}${primed && sectionParts.has(`${doc}/${sectionNo}′`) ? '′' : ''}`;
       if (sectionParts.has(id)) return { id, indices: sectionParts.get(id) };
       return { missing: id };
     }

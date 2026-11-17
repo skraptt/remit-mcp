@@ -85,6 +85,32 @@ test('provision references resolve', () => {
   assert.ok(r('Article 99 REMIT').error);
 });
 
+test('guidance citations with the edition number resolve to the section', () => {
+  const r = (s) => e.getProvision({ provision: s }).id;
+  // The form this server itself returns in `citation`.
+  assert.equal(r('ACER Guidance 6.1, section 4.4'), 'ACER-GUIDANCE/4.4');
+  assert.equal(r('ACER Guidance 6.1, section 4.3, paras. (133)-(134)'), 'ACER-GUIDANCE/4.3');
+  assert.equal(r('ACER Guidance 6.1, section 9.4.4.4, paras. (512)-(516)'), 'ACER-GUIDANCE/9.4.4.4');
+  assert.equal(r('ACER Guidance 6.1st edition, section 2.4'), 'ACER-GUIDANCE/2.4');
+  assert.equal(r('ACER Guidance (6.1st edition) 5.5.2'), 'ACER-GUIDANCE/5.5.2');
+  assert.equal(r('ACER Guidance, edition 6.1, 8.6'), 'ACER-GUIDANCE/8.6');
+  // Without an edition the number is the section, including section 6.1 itself.
+  assert.equal(r('ACER Guidance 4.4'), 'ACER-GUIDANCE/4.4');
+  assert.equal(r('ACER Guidance 6.1'), 'ACER-GUIDANCE/6.1');
+  // Every citation the server returns resolves back to the same unit, for all documents
+  // (guidance notes, open letters, introductions, annex sections, primed duplicates).
+  const seen = new Set();
+  for (const u of data.units) {
+    const id = `${u.d}/${u.n.replace(/~\d+$/, '')}`;
+    if (seen.has(id)) continue;
+    seen.add(id);
+    const { citation } = e.search({ query: id, limit: 1 }).results[0];
+    assert.equal(e.getProvision({ provision: citation }).id, id, citation);
+  }
+  // A citation query puts that section first in search.
+  assert.equal(e.search({ query: 'ACER Guidance 6.1, section 4.4' }).results[0].id.replace(/~\d+$/, ''), 'ACER-GUIDANCE/4.4');
+});
+
 test('an article comes with the ACER material that refers to it', () => {
   const p = e.getProvision({ provision: 'Article 4 REMIT' });
   assert.ok(p.acerGuidance.length > 0 && p.acerQAs.length > 0);
